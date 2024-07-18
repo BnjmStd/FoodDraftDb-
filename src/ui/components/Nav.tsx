@@ -1,6 +1,38 @@
-'use client'
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from "react";
 
+export default function Nav() {
+
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+    const handleSetActive = (index: number) => {
+        setActiveIndex(index);
+    };
+
+    return (
+        <>
+            <nav className="items-center justify-center hidden md:flex">
+                <ul
+                    className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
+                    [&>li>a]:duration-500 [&>li>a]:inline-block 
+                    [&>li>a]:px-4 [&>li>a]:py-2`}
+                >
+                    {["Home", "Database", "Alimentos", "Empresas"].map((item, index) => (
+                        <li key={index}>
+                            <a
+                                href="#"
+                                onClick={() => handleSetActive(index)}
+                                className={activeIndex === index ? "underline-custom" : ""}
+                            >
+                                {item}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+                <MenuBackdrop />
+            </nav>
+        </>
+    );
+}
 
 const MenuBackdrop = () => {
     const menuBackdropRef = useRef<HTMLDivElement | null>(null);
@@ -9,7 +41,6 @@ const MenuBackdrop = () => {
         const listItem = document.querySelectorAll("#landing-header li");
 
         listItem.forEach((item) => {
-            console.log("jpña")
             const handleMouseEnter = () => {
                 const { left, top, width, height } = item.getBoundingClientRect();
                 const menuBackdrop = menuBackdropRef.current;
@@ -56,5 +87,3 @@ const MenuBackdrop = () => {
         />
     )
 };
-
-export default MenuBackdrop;
