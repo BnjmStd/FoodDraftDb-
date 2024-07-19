@@ -1,9 +1,10 @@
 import { MdOutlineFastfood } from "react-icons/md";
 import { useState } from "react";
 import { FaBars, FaTimes } from 'react-icons/fa';
-import Logo from "./Logo";
+import Logo from "../Logo";
 import Nav from "./Nav";
 import Link from "next/link";
+import "./HeroStyle.css"
 
 export default function hero () {
 
@@ -48,7 +49,6 @@ export default function hero () {
                     </nav>
                 </div>
             )}
-            
         </header>   
     );
 }

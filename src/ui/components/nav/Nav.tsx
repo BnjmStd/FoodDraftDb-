@@ -1,8 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import {
+    useEffect,
+    useRef,
+    useState
+} from "react";
+
+import { usePathname } from 'next/navigation'
 
 export default function Nav() {
 
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const SECCION = ["Home", "Foods", "Companies"]
+
+    const namePath = SECCION.indexOf(usePathname().split('/')[1]); // devuelve -1
+
+    const [activeIndex, setActiveIndex] = useState<number | null>(namePath > 0 ? namePath : 0);
 
     const handleSetActive = (index: number) => {
         setActiveIndex(index);
@@ -16,15 +27,15 @@ export default function Nav() {
                     [&>li>a]:duration-500 [&>li>a]:inline-block 
                     [&>li>a]:px-4 [&>li>a]:py-2`}
                 >
-                    {["Home", "Database", "Alimentos", "Empresas"].map((item, index) => (
+                    {SECCION.map((item, index) => (
                         <li key={index}>
-                            <a
-                                href="#"
+                            <Link
+                                href={`${index == 0 ? "/" : `/${item}`}`}
                                 onClick={() => handleSetActive(index)}
                                 className={activeIndex === index ? "underline-custom" : ""}
                             >
                                 {item}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
