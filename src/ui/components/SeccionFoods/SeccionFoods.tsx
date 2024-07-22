@@ -1,4 +1,5 @@
 'use client'
+
 import ArrowDown from '@/ui/icons/ArrowDown';
 import Search from '@/ui/icons/Search';
 import { 
@@ -6,7 +7,7 @@ import {
     useEffect 
 } from 'react';
 
-export default function SeccionFoods() {
+export default function SearchInputFoods() {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {

@@ -1,7 +1,38 @@
 import Food from '@/ui/icons/Food';
 import Link from 'next/link';
+import prisma from '@/lib/actions/prisma';
+import { redirect } from 'next/navigation';
 
 export default function SignUp (){
+
+    const createNew = async (formData: FormData) => {
+        "use server"
+
+        const email = formData.get('email')?.toString()
+        const password = formData.get('password')?.toString()
+        const check = formData.get('check')?.toString()
+        const confirmPassword = formData.get('confirmPassword')?.toString()
+        const country = 'chile'
+
+
+        if (password !== confirmPassword) {
+            return
+        }
+
+        if (check === undefined) return
+        if (!email || !password || !check || !country) return 
+
+        const newCompanie = await prisma.eMPRESA.create({
+            data: {
+              email: email,
+              nombre: password,
+              pais: country
+            }
+          })
+
+        redirect("/")
+    }
+
     return (
         <section className="bg-gray-50 w-full">
             <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
@@ -13,7 +44,7 @@ export default function SignUp (){
                         <h4 className="text-xl font-bold  tracking-tight text-gray-900 md:text-2xl">
                             Create an account
                         </h4>
-                        <form className="space-y-2 md:space-y-6" action="#">
+                        <form className="space-y-2 md:space-y-6" action={createNew}>
                             <div>
                                 <label
                                     htmlFor="email"
@@ -50,7 +81,7 @@ export default function SignUp (){
                                 text-gray-900">Confirm password</label>
                                 <input
                                     type="password"
-                                    name="confirm-password"
+                                    name="confirmPassword"
                                     id="confirm-password"
                                     placeholder="••••••••"
                                     className="bg-gray-50 border border-gray-300 
@@ -63,11 +94,13 @@ export default function SignUp (){
                                 <div className="flex items-center h-5">
                                     <input
                                         id="terms"
+                                        name='check'
                                         aria-describedby="terms"
                                         type="checkbox"
                                         className="w-4 h-4 border border-gray-300 
                                         rounded bg-gray-50 focus:ring-3 
                                         focus:ring-primary-300"
+                                        value={'checked'}
                                         required
                                     />
                                 </div>

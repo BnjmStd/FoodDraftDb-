@@ -17,9 +17,7 @@ import {
 
 export default function ShiftingDropDown() {
   return (
-    <div className="flex w-full justify-between py-6 text-black md:justify-center">
       <Tabs />
-    </div>
   )
 }
 
@@ -89,7 +87,6 @@ const Tab = ({
   )
 }
 
-
 const Content = ({
   selected,
   dir
@@ -114,8 +111,7 @@ const Content = ({
         y: 8,
       }}
       className="absolute left-0 top-[calc(100%_+_24px)] w-96 rounded-lg border 
-      border-neutral-600 bg-gradient-to-b from-green-900 via-green-900 
-      to-green-700 p-4"
+      border-neutral-600 bg-neutral-400"
     >
       <Bridge />
       <Nub selected={selected} />
@@ -269,7 +265,6 @@ const Blog = () => {
   )
 }
 
-
 interface TabProps {
   id: number;
   title: string;
@@ -278,17 +273,17 @@ interface TabProps {
 
 const TABS: TabProps[] = [
   {
-    title: "Products",
+    title: "Foods",
     Component: Products,
     id: 1,
   },
   {
-    title: "Pricing",
+    title: "Nutrientsss",
     Component: Pricing,
     id: 2,
   },
   {
-    title: "Blog",
+    title: "vitamine",
     Component: Blog,
     id: 3,
   }

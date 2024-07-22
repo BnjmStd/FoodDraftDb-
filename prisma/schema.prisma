@@ -2,7 +2,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//url      = env("DATABASE_URL")
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model EMPRESA {
+  id_empresa Int      @id @default(autoincrement())
+  nombre     String
+  pais       String
+  email      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
