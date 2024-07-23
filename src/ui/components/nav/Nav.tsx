@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
     useEffect,
     useRef,
@@ -7,7 +6,11 @@ import {
 
 import { usePathname } from 'next/navigation'
 
-export default function Nav() {
+export default function Nav({
+    setContent
+} : {
+    setContent: React.Dispatch<React.SetStateAction<string>>
+}) {
 
     const SECCION = ["Home", "Foods", "Companies"]
 
@@ -15,8 +18,10 @@ export default function Nav() {
 
     const [activeIndex, setActiveIndex] = useState<number | null>(namePath > 0 ? namePath : 0);
 
-    const handleSetActive = (index: number) => {
+    const handleSetActive = (index: number, content: string) => {
         setActiveIndex(index);
+        console.log(content)
+        setContent(content)
     };
 
     return (
@@ -29,13 +34,14 @@ export default function Nav() {
                 >
                     {SECCION.map((item, index) => (
                         <li key={index}>
-                            <Link
-                                href={`${index == 0 ? "/" : `/${item}`}`}
-                                onClick={() => handleSetActive(index)}
+                            <a
+                                //href={`${index == 0 ? "/" : `/${item}`}`}
+                                href="#"
+                                onClick={() => handleSetActive(index, index == 0 ? "/" : `/${item}`)}
                                 className={activeIndex === index ? "underline-custom" : ""}
                             >
                                 {item}
-                            </Link>
+                            </a>
                         </li>
                     ))}
                 </ul>

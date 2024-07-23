@@ -6,7 +6,11 @@ import Nav from "./Nav";
 import Link from "next/link";
 import "./HeroStyle.css"
 
-export default function hero () {
+export default function hero ({
+    setContent
+} : {
+    setContent: React.Dispatch<React.SetStateAction<string>>
+}) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -21,7 +25,7 @@ export default function hero () {
             justify-between  text-black z-40 border-b-2 text-sm"
         >
             <Logo />
-            <Nav />
+            <Nav setContent={setContent} />
 
             <div className="flex sm:hidden">
                 <button
