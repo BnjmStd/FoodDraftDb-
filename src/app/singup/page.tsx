@@ -1,38 +1,8 @@
 import Food from '@/ui/icons/Food';
 import Link from 'next/link';
-import prisma from '@/lib/actions/prisma';
-import { redirect } from 'next/navigation';
+import { createNew } from '@/lib/actions/user';
 
-export default function SignUp (){
-
-    const createNew = async (formData: FormData) => {
-        "use server"
-
-        const email = formData.get('email')?.toString()
-        const password = formData.get('password')?.toString()
-        const check = formData.get('check')?.toString()
-        const confirmPassword = formData.get('confirmPassword')?.toString()
-        const country = 'chile'
-
-
-        if (password !== confirmPassword) {
-            return
-        }
-
-        if (check === undefined) return
-        if (!email || !password || !check || !country) return 
-
-        const newCompanie = await prisma.eMPRESA.create({
-            data: {
-              email: email,
-              nombre: password,
-              pais: country
-            }
-          })
-
-        redirect("/")
-    }
-
+export default function SignUp() {
     return (
         <section className="bg-gray-50 w-full">
             <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
@@ -105,13 +75,13 @@ export default function SignUp (){
                                     />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                    <label 
-                                        htmlFor="terms" 
+                                    <label
+                                        htmlFor="terms"
                                         className="font-light text-gray-500">
-                                        I accept the 
-                                        <a 
+                                        I accept the
+                                        <a
                                             className="font-medium text-primary-600 
-                                            hover:underline" 
+                                            hover:underline"
                                             href="#"
                                         >
                                             Terms and Conditions
@@ -128,11 +98,11 @@ export default function SignUp (){
                             >
                                 Create an account
                             </button>
-                            <p 
+                            <p
                                 className="text-sm font-light text-gray-500">
-                                Already have an account? 
-                                <Link 
-                                    href="/login" 
+                                Already have an account?
+                                <Link
+                                    href="/login"
                                     className="font-medium text-primary-600 
                                         hover:underline">
                                     Login here

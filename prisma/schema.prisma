@@ -1,19 +1,32 @@
+//url      = env("DATABASE_URL")
+
 generator client {
   provider = "prisma-client-js"
 }
-
-//url      = env("DATABASE_URL")
 
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
-model EMPRESA {
-  id_empresa Int      @id @default(autoincrement())
-  nombre     String
-  pais       String
-  email      String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  country   String
+  email     String   @unique
+  password  String
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  foods     Food[]
+}
+
+model Food {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
 }

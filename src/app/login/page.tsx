@@ -1,10 +1,12 @@
 'use client'
 
+import { login } from "@/lib/actions/user";
 import Link from "next/link";
 import { useState } from "react"
-import { FaLock, FaUnlock } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
+    
     const [password, setPassword] = useState('')
 
     const handleChangePwd = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
@@ -21,7 +23,7 @@ export default function Login() {
         <>
             <div className="flex items-center justify-center mt-28">
                 <div className="w-96 border rounded bg-while px-7 py-10">
-                    <form>
+                    <form action={login}>
                         <h4 className="text-2xl mb-2 text-center">Login</h4>
 
                         <div className="relative z-0 w-full mb-5 group">
@@ -74,13 +76,13 @@ export default function Login() {
                             </label>
 
                             <span
-                                className="text-primary cursor-pointer border-0 border-b-2 border-gray-300"
+                                className="text-primary cursor-pointer "
                                 onClick={toggleShowPassword}
                             >
                                 {
                                     isShowPassword
-                                        ? <FaUnlock />
-                                        : <FaLock />
+                                        ? <FaEye />
+                                        : <FaEyeSlash />
                                 }
                             </span>
                         </div>
