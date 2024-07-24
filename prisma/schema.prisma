@@ -22,11 +22,27 @@ model User {
 }
 
 model Food {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  categories FoodCategory[] 
+}
+
+model Category {
+  id     Int    @id @default(autoincrement())
+  name   String
+  foods FoodCategory[] 
+}
+
+model FoodCategory {
+  foodId     Int
+  categoryId Int
+  food       Food       @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@id([foodId, categoryId])
 }

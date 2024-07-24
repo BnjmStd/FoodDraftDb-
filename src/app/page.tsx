@@ -23,10 +23,10 @@ const HomeContent = () => {
 
 const FoodContent = () => {
     return (
-        <>
+        <div className="flex flex-col">
             <SearchInputFoods />
             <CardSeccion />
-        </>
+        </div>
     )
 }
 
@@ -60,7 +60,7 @@ const MainContent = ({
 }: {
     content: string
 }) => (
-    <div className="ml-16 p-4">
+    <div className="mt-20 p-4 flex justify-center items-center ">
         <Suspense fallback={<Spinner />}>
             <LazyContentComponent type={content} />
         </Suspense>
@@ -72,10 +72,11 @@ export default function Home() {
     const [content, setContent] = useState('/')
 
     return (
-        <>
+        <div className="overflow-y-auto">
             <Hero setContent={setContent} />
             <MainContent content={content} />
             <Footer />
-        </>
+        </div>
+
     )
 }

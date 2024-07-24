@@ -1,20 +1,37 @@
 'use client'
 
+import { getAllCategory } from '@/lib/actions/category';
 import ArrowDown from '@/ui/icons/ArrowDown';
 import Search from '@/ui/icons/Search';
-import { 
-    useState, 
-    useEffect 
+import { Category } from '@prisma/client';
+import {
+    useState,
+    useEffect
 } from 'react';
 
 export default function SearchInputFoods() {
+
+    const [categories, setCategories] = useState<Category[]>([])
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategory = async () => {
+            const fetchedCategorys = await getAllCategory()
+            setCategories(fetchedCategorys)
+            setLoading(false);
+        };
+
+        fetchCategory();
+
+    }, []);
+
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
         if (!event.target.closest('#dropdown-button') && !event.target.closest('#dropdown')) {
             setDropdownOpen(false);
         }
@@ -25,8 +42,12 @@ export default function SearchInputFoods() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div className="w-full mt-24">
+        <div className="w-full">
             <form className="max-w-lg mx-auto">
                 <div className="relative flex">
                     <button
@@ -44,29 +65,26 @@ export default function SearchInputFoods() {
                     <div
                         id="dropdown"
                         className={`absolute z-10 
-                            ${isDropdownOpen 
-                                ? 'block' 
+                            ${isDropdownOpen
+                                ? 'block'
                                 : 'hidden'
                             } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-1`}
-                        style={{ 
-                            top: '100%', 
-                            left: 0 
+                        style={{
+                            top: '100%',
+                            left: 0
                         }}
                     >
-                        <ul 
-                            className="py-2 text-sm text-gray-700" 
-                            aria-labelledby="dropdown-button">
-                            
-                           { /* rellenar todo con bd  */}
-
-                            <li>
-                                <a 
-                                    type="button" 
-                                    className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
-                                >
-                                    Mockups
-                                </a>
-                            </li>
+                        <ul className="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
+                            {categories.map(category => (
+                                <li key={category.id}>
+                                    <a
+                                        type="button"
+                                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
+                                    >
+                                        {category.name}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                     <div className="relative w-full">

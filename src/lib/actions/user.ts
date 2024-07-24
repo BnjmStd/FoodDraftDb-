@@ -1,7 +1,8 @@
 "use server"
-import { redirect } from "next/navigation"
+
 import prisma from "./prisma"
 import { validateEmail } from '@/lib/utils/helper'
+import { redirect } from "next/navigation"
 
 interface UserType {
     ADMIN: "admin";
@@ -67,7 +68,7 @@ export const login = async (formData: FormData) => {
     };
 }
 
-export const getAll = () => {
+export const getAllUser = () => {
     return prisma.user.findMany()
         .then(users => users)
         .catch(error => {

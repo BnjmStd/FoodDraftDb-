@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa";
 import { BsNutFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
-import { MdFastfood } from "react-icons/md";
+import { MdFastfood, MdCategory } from "react-icons/md";
 
 export default function Sidebar({ 
     setContent 
@@ -13,6 +13,7 @@ export default function Sidebar({
             <main className="flex flex-col space-y-4">
                 <Button icon={<FaUser color='red' />} onClick={() => setContent('Usuarios')} />
                 <Button icon={<MdFastfood color='red' />} onClick={() => setContent('Comida')} />
+                <Button icon={<MdCategory color='red' />} onClick={() => setContent('Category')} />
             </main>
             <footer className="flex flex-col space-y-4 pb-5">
                 <Button icon={<BsNutFill color='red' />} onClick={() => setContent('Nuts')} />
