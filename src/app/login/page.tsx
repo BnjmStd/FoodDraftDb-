@@ -6,15 +6,11 @@ import { useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
-    
+
     const [password, setPassword] = useState('')
-
     const handleChangePwd = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
-    
     const [error, setError] = useState<string | null>(null)
-
     const [isShowPassword, setIsShowPassword] = useState(false)
-
     const toggleShowPassword = () => {
         setIsShowPassword(!isShowPassword)
     }
@@ -22,7 +18,7 @@ export default function Login() {
     return (
         <>
             <div className="flex items-center justify-center mt-28">
-                <div className="w-96 border rounded bg-while px-7 py-10">
+                <div className="w-96 border rounded bg-while px-7 py-10">              
                     <form action={login}>
                         <h4 className="text-2xl mb-2 text-center">Login</h4>
 

@@ -9,20 +9,23 @@ import { BsSearchHeart } from "react-icons/bs"
 import Spinner from "@/ui/components/loading/Spinner"
 import Sidebar from "@/ui/components/sidebar/Sidebar"
 import Table from "@/ui/components/table/Table"
-import Modal from 'react-modal'
+import Dialog from "@/ui/components/dialog/Dialog"
 
 /* forms */
 import { FoodForm } from "@/ui/components/forms/createNewFoodForm"
 import { UserForm } from "@/ui/components/forms/createNewUserForm"
 
 /* actions */
-import { Category, Food, User } from "@prisma/client"
+import { 
+    Category, 
+    Food, 
+    User 
+} from "@prisma/client"
+
 import { main } from "@/lib/seeds"
 import { getAllUser } from "@/lib/actions/user"
 import { getAllCategory } from "@/lib/actions/category"
-import {
-    getAllFood
-} from "@/lib/actions/food"
+import { getAllFood } from "@/lib/actions/food"
 
 /* react */
 import React, {
@@ -36,10 +39,8 @@ import React, {
 const CategoryComponent = () => {
     const [categorys, setCategorys] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-
-    const openModal = () => setModalIsOpen(true)
-    const closeModal = () => setModalIsOpen(false)
+    const column = ["name"]
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const reloadData = async () => {
         const fetchedCategorys = await getAllCategory();
@@ -58,19 +59,18 @@ const CategoryComponent = () => {
 
     }, []);
 
+    const openDialog = () => setIsDialogOpen(true)
+
     if (loading) return <Spinner />
-
-    const column = ["name"]
-
     return (
         <>
-            <ModalComponent
-                modalIsOpen={modalIsOpen}
-                closeModal={closeModal}
-                title="Create New Categories"
+            <Dialog 
+                isOpen={isDialogOpen} 
+                isSetOpen={setIsDialogOpen} 
+                title="New Category" 
             >
-                hola
-            </ModalComponent>
+                <FoodForm />
+            </Dialog>
 
             <div className="flex flex-col gap-2">
                 <main className="flex flex-row gap-2 justify-between">
@@ -84,7 +84,7 @@ const CategoryComponent = () => {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={openModal}
+                            onClick={openDialog}
                         >
                             <IoIosAddCircle />
                         </button>
@@ -125,10 +125,7 @@ const ConfigComponent = () => {
 const FoodComponent = () => {
     const [foods, setFoods] = useState<Food[]>([]);
     const [loading, setLoading] = useState(true);
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-
-    const openModal = () => setModalIsOpen(true)
-    const closeModal = () => setModalIsOpen(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const reloadData = async () => {
         const fetchedFoods = await getAllFood();
@@ -151,15 +148,17 @@ const FoodComponent = () => {
 
     const column = ["name", "description", "categories"]
 
+    const openDialog = () => setIsDialogOpen(true)
+
     return (
         <>
-            <ModalComponent
-                modalIsOpen={modalIsOpen}
-                closeModal={closeModal}
-                title="Create New Foods"
+            <Dialog 
+                isOpen={isDialogOpen} 
+                isSetOpen={setIsDialogOpen} 
+                title="Create New Foods" 
             >
                 <FoodForm />
-            </ModalComponent>
+            </Dialog>
 
             <div className="flex flex-col gap-2">
                 <main className="flex flex-row gap-2 justify-between">
@@ -173,7 +172,7 @@ const FoodComponent = () => {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={openModal}
+                            onClick={openDialog}
                         >
                             <IoIosAddCircle />
                         </button>
@@ -227,48 +226,10 @@ const SearchAdmin = () => {
     )
 }
 
-import { IoMdClose } from "react-icons/io";
-
-const ModalComponent = ({
-    children,
-    modalIsOpen,
-    closeModal,
-    title
-}: {
-    children: React.ReactNode;
-    modalIsOpen: boolean;
-    closeModal: () => void;
-    title: string;
-}) => {
-    return (
-        <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            className="fixed inset-0 flex items-center justify-center my-20"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        >
-            <div className="bg-white rounded-lg shadow-lg w-[500px] p-4">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-center">{title}</h2>
-                    <button onClick={closeModal} className="p-2 bg-red-500 text-white rounded hover:bg-red-600">
-                        <IoMdClose />
-                    </button>
-                </div>
-                <div>
-                    {children}
-                </div>
-            </div>
-        </Modal>
-    );
-};
-
 const UserComponent = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-
-    const openModal = () => setModalIsOpen(true)
-    const closeModal = () => setModalIsOpen(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const reloadData = async () => {
         const fetchedUsers = await getAllUser();
@@ -291,15 +252,17 @@ const UserComponent = () => {
 
     const column = ["id", "name", "email", "password"]
 
+    const openDialog = () => setIsDialogOpen(true)
+
     return (
         <>
-            <ModalComponent
-                modalIsOpen={modalIsOpen}
-                closeModal={closeModal}
-                title="Create New User"
+            <Dialog 
+                isOpen={isDialogOpen} 
+                isSetOpen={setIsDialogOpen} 
+                title="Create New User" 
             >
                 <UserForm />
-            </ModalComponent>
+            </Dialog>
 
             <div className="flex flex-col gap-2">
                 <main className="flex flex-row gap-2 justify-between">
@@ -313,7 +276,7 @@ const UserComponent = () => {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={openModal}
+                            onClick={openDialog}
                         >
                             <IoIosAddCircle />
                         </button>
