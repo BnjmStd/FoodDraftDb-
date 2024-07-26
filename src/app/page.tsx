@@ -48,12 +48,16 @@ const ContentComponent = ({
             return <HomeContent />
         case '/Foods':
             return <FoodContent />
+        case '/Companies':
+            return <CompanieContent />
         default:
             return <div>Contenido no encontrado.</div>;
     }
 };
 
-const LazyContentComponent = lazy(() => Promise.resolve({ default: ContentComponent }));
+const LazyContentComponent = lazy(() => Promise.resolve({
+    default: ContentComponent
+}));
 
 const MainContent = ({
     content
@@ -77,6 +81,5 @@ export default function Home() {
             <MainContent content={content} />
             <Footer />
         </div>
-
     )
 }

@@ -1,50 +1,48 @@
 'use client'
 
-import { getAllCategory } from '@/lib/actions/category';
-import ArrowDown from '@/ui/icons/ArrowDown';
-import Search from '@/ui/icons/Search';
-import { Category } from '@prisma/client';
+import { getAllCategory } from '@/lib/actions/category'
+import ArrowDown from '@/ui/icons/ArrowDown'
+import Search from '@/ui/icons/Search'
+import { Category } from '@prisma/client'
 import {
     useState,
     useEffect
-} from 'react';
+} from 'react'
 
 export default function SearchInputFoods() {
 
     const [categories, setCategories] = useState<Category[]>([])
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchCategory = async () => {
             const fetchedCategorys = await getAllCategory()
             setCategories(fetchedCategorys)
-            setLoading(false);
-        };
+            setLoading(false)
+        }
 
-        fetchCategory();
+        fetchCategory()
 
-    }, []);
+    }, [])
 
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isDropdownOpen, setDropdownOpen] = useState(false)
 
     const toggleDropdown = () => {
-        setDropdownOpen(!isDropdownOpen);
+        setDropdownOpen(!isDropdownOpen)
     };
 
     const handleClickOutside = (event: any) => {
         if (!event.target.closest('#dropdown-button') && !event.target.closest('#dropdown')) {
-            setDropdownOpen(false);
+            setDropdownOpen(false)
         }
-    };
+    }
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    if (loading) return <div>Loading...</div>
 
     return (
         <div className="w-full">
@@ -109,5 +107,5 @@ export default function SearchInputFoods() {
                 </div>
             </form>
         </div>
-    );
+    )
 }

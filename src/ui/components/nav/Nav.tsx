@@ -20,13 +20,12 @@ export default function Nav({
 
     const handleSetActive = (index: number, content: string) => {
         setActiveIndex(index);
-        console.log(content)
         setContent(content)
     };
 
     return (
         <>
-            <nav className="items-center justify-center hidden md:flex">
+            <nav className="items-center justify-center hidden sm:flex">
                 <ul
                     className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
                     [&>li>a]:duration-500 [&>li>a]:inline-block 
