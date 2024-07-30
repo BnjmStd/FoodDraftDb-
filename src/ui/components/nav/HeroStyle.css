@@ -1,15 +1,7 @@
-header {
-    color: white;
-    text-align: center;
-    padding: 16px;
-    margin: 0;
-    width: 100%;
-    top: 0;
-    left: 0;
+#landing-header {
     animation: enhace-header linear both;
-    animation-timeline: scroll(root block) ;
+    animation-timeline: scroll(root block);
     animation-range: 0 200px;
-    z-index: 1;
 }
 
 @keyframes enhace-header {

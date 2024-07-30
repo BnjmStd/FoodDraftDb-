@@ -7,14 +7,14 @@ import {
 import { usePathname } from 'next/navigation'
 
 export default function Nav({
-    setContent
+    setContent,
+    seccion
 } : {
     setContent: React.Dispatch<React.SetStateAction<string>>
+    seccion: string[]
 }) {
 
-    const SECCION = ["Home", "Foods", "About", "Blog", "Pricing"]
-
-    const namePath = SECCION.indexOf(usePathname().split('/')[1]); // devuelve -1
+    const namePath = seccion.indexOf(usePathname().split('/')[1]); // devuelve -1
 
     const [activeIndex, setActiveIndex] = useState<number | null>(namePath > 0 ? namePath : 0);
 
@@ -25,13 +25,13 @@ export default function Nav({
 
     return (
         <>
-            <nav className="items-center justify-center hidden sm:flex">
+            <nav className="items-center justify-center hidden md:flex">
                 <ul
                     className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
                     [&>li>a]:duration-500 [&>li>a]:inline-block 
                     [&>li>a]:px-4 [&>li>a]:py-2`}
                 >
-                    {SECCION.map((item, index) => (
+                    {seccion.map((item, index) => (
                         <li key={index}>
                             <a
                                 //href={`${index == 0 ? "/" : `/${item}`}`}

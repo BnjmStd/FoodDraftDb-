@@ -76,10 +76,12 @@ export default function Home() {
     const [content, setContent] = useState('/')
 
     return (
-        <main className="overflow-y-auto min-h-[100vh]">
-            <Hero setContent={setContent} />
-            <MainContent content={content} />
-            <Footer />
-        </main>
+        <>
+            <main className="overflow-y-auto">
+                <Hero setContent={setContent} />
+                <MainContent content={content} />
+                <Footer />
+            </main>
+        </>
     )
 }
