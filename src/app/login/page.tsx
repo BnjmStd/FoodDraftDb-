@@ -7,7 +7,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import "./Nav.css"
 
-
 export default function Login() {
 
     const [password, setPassword] = useState('')

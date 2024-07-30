@@ -12,7 +12,7 @@ export default function Nav({
     setContent: React.Dispatch<React.SetStateAction<string>>
 }) {
 
-    const SECCION = ["Home", "Foods", "Companies"]
+    const SECCION = ["Home", "Foods", "About", "Blog", "Pricing"]
 
     const namePath = SECCION.indexOf(usePathname().split('/')[1]); // devuelve -1
 

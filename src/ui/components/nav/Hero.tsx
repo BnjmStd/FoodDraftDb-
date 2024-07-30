@@ -1,4 +1,3 @@
-import { MdOutlineFastfood } from "react-icons/md";
 import { useState } from "react";
 import { FaBars, FaTimes } from 'react-icons/fa';
 import Logo from "../Logo";
@@ -22,7 +21,7 @@ export default function hero ({
         <header
             id="landing-header" 
             className="py-2 px-10 flex items-center fixed top-0 w-full 
-            justify-between  text-black z-40 border-b-2 text-sm"
+            justify-between text-black z-40 border-b-2 text-sm"
         >
             <Logo />
             <Nav setContent={setContent} />
@@ -36,11 +35,20 @@ export default function hero ({
                 </button>
             </div>
 
-            <Link href={"/login"} className="bg-black hidden gap-2 text-white p-2 rounded-md md:flex
-                hover:bg-neutral-700 ">
-                Account
-                <MdOutlineFastfood />
-            </Link>
+
+            <div className="hidden md:flex md:flex-row gap-2 ">
+                <Link 
+                    href={"/login"} 
+                    className="bg-black gap-2 text-white p-2 rounded-md 
+                    hover:bg-neutral-700 ">
+                    Login
+                </Link>
+                <Link 
+                    href={"/singup"} 
+                    className="border-2 border-black gap-2 text-black p-2 rounded-md hover:bg-neutral-500 hover:text-white">
+                    Sing up
+                </Link>
+            </div>
 
             {isOpen && (
                 <div className="sm:hidden bg-white shadow-md">
