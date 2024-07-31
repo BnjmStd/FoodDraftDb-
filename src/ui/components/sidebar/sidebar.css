@@ -1,0 +1,24 @@
+.icons:hover::after {
+    content: attr(info-tooltip);
+    position: absolute;
+    left: 89px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 20px;
+    z-index: 100;
+}
+
+.icons:hover::before {
+    content: '';
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+}

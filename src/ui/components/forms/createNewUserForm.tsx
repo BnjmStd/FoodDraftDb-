@@ -1,8 +1,8 @@
-import { createNew } from "@/lib/actions/user";
+import { createNewAdmin } from "@/lib/actions/user";
 
 export const UserForm = () => {
     return (
-        <form action={createNew} className=" bg-white rounded-lg">
+        <form action={createNewAdmin} className=" bg-white rounded-lg">
             <div className="mb-4">
                 <label 
                     htmlFor="name" 

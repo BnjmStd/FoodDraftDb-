@@ -34,7 +34,11 @@ export default function SignUp() {
                                 />
                             </div>
                             <div>
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                                <label 
+                                    htmlFor="password" 
+                                    className="block mb-2 text-sm font-medium text-gray-900">
+                                        Password
+                                </label>
                                 <input
                                     type="password"
                                     name="password"
@@ -47,7 +51,9 @@ export default function SignUp() {
                                 />
                             </div>
                             <div>
-                                <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium 
+                                <label 
+                                    htmlFor="confirm-password" 
+                                    className="block mb-2 text-sm font-medium 
                                 text-gray-900">Confirm password</label>
                                 <input
                                     type="password"
@@ -99,11 +105,11 @@ export default function SignUp() {
                                 Create an account
                             </button>
                             <p
-                                className="text-sm font-light text-gray-500">
+                                className="text-sm font-light text-gray-500 flex gap-2">
                                 Already have an account?
                                 <Link
                                     href="/login"
-                                    className="font-medium text-primary-600 
+                                    className="font-medium  text-neutral-500 hover:text-red-600 
                                         hover:underline">
                                     Login here
                                 </Link>

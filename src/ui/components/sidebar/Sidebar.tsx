@@ -2,7 +2,7 @@ import { FaUser } from "react-icons/fa";
 import { BsNutFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
 import { MdFastfood, MdCategory } from "react-icons/md";
-
+import "./sidebar.css"
 export default function Sidebar({ 
     setContent 
 }: {
@@ -18,24 +18,29 @@ export default function Sidebar({
                 <Button 
                     icon={<FaUser color={`${color}`} />} 
                     onClick={() => setContent('Usuarios')} 
+                    content="User"
                 />
                 <Button 
                     icon={<MdFastfood color={`${color}`} />} 
-                    onClick={() => setContent('Comida')} 
+                    onClick={() => setContent('Comida')}
+                    content="Food"
                 />
                 <Button 
                     icon={<MdCategory color={`${color}`} />} 
-                    onClick={() => setContent('Category')} 
+                    onClick={() => setContent('Category')}
+                    content="Category"     
                 />
             </main>
             <footer className="flex flex-col space-y-4 pb-5">
                 <Button 
                     icon={<BsNutFill color={`${color}`} />} 
-                    onClick={() => setContent('Nuts')} 
+                    onClick={() => setContent('Setting')}
+                    content="Setting"
                 />
                 <Button 
                     icon={<IoLogOut color={`${color}`} />} 
                     onClick={() => setContent('Logout')} 
+                    content="Logout"
                 />
             </footer>
         </div>
@@ -44,14 +49,19 @@ export default function Sidebar({
 
 function Button({ 
     icon,
-    onClick
+    onClick,
+    content
 }:{
     icon: JSX.Element
     onClick: () => void
+    content: string
 }) {
     return (
-        <button onClick={onClick} className="hover:bg-slate-400 w-16 h-16 flex 
-        items-center justify-center">
+        <button onClick={onClick} 
+        info-tooltip={content}
+        className="relative icons hover:bg-slate-400 w-16 h-16 flex 
+        items-center justify-center
+        ">
             {icon}
         </button>
     )

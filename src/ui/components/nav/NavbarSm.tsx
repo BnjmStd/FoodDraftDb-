@@ -24,7 +24,7 @@ export default function NavbarSm({
                     {
                         seccion.map((x, xid) => {
                             return (
-                                <li className="nav__item" id={`${xid}`}>
+                                <li key={xid} className="nav__item">
                                     <a href="#" className="nav__link">
                                         {x}
                                     </a>
@@ -32,6 +32,10 @@ export default function NavbarSm({
                             );
                         })
                     }
+                    <div>
+                        <a className="nav__link" href="">Sing Up</a>
+                        <a className="nav__link" href="">Login</a>
+                    </div>
                 </ul>
             </div>
         </nav>

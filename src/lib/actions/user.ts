@@ -11,6 +11,32 @@ interface UserType {
     NORMAL: "normal";
 }
 
+export const createNewAdmin = async (formData: FormData) => {
+    const email = formData.get('email')?.toString()
+    const password = formData.get('password')?.toString()
+    const check = formData.get('check')?.toString()
+    const confirmPassword = formData.get('confirmPassword')?.toString()
+    const country = 'chile'
+
+    if (!email || !password || !check || !country) return
+    if (!validateEmail(email)) return 
+
+    const newCompanie = await prisma.user.create({
+        data: {
+            name: "?",
+            country: country,
+            email: email,
+            password: password,
+            type: "admin"
+        }
+    })
+
+    console.log(newCompanie)
+
+    // redirect("/admin/user")
+}
+
+
 export const createNew = async (formData: FormData) => {
     const email = formData.get('email')?.toString()
     const password = formData.get('password')?.toString()

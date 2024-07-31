@@ -18,54 +18,6 @@ export default function Login() {
     }
 
     return (
-        <>
-
-            <nav className="nav">
-
-                <div className="nav__container">
-
-                    <figure className="nav__figure">
-                        <img className="nav__logo"
-                            src="" alt="" />
-                    </figure>
-
-                    <label
-                        className="nav__togle"
-                    >
-
-                        <input
-                            type="checkbox"
-                            id="menu-input"
-                            className="nav__input"
-                        />
-
-                    </label>
-
-                    <ul className="nav__list">
-                        <li className="nav__item">
-                            <a 
-                                href="#"
-                                className="nav__link"
-                            >
-                                Gallery
-                            </a>
-                        </li>
-
-                        <li className="nav__item">
-                            <a 
-                                href="#"
-                                className="nav__link"
-                            >
-                                Miaus
-                            </a>
-                        </li>
-                    </ul>
-
-                </div>
-
-            </nav>
-
-
             <div className="flex items-center justify-center mt-28">
                 <div className="w-96 border rounded bg-while px-7 py-10">
                     <form action={login}>
@@ -144,6 +96,5 @@ export default function Login() {
                     </form>
                 </div>
             </div>
-        </>
     )
 }
