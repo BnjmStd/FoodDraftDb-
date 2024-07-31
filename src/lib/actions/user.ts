@@ -71,22 +71,22 @@ export const createNewAdmin = async (formData: FormData) => {
 
 */
 
-export const createNew = async (formData: FormData) => {
+export const createNew = async (prevState, formData: FormData) => {
     
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    console.log('FormData:', formData) 
     try {
-        const email = formData.get('email') as string
-        console.log('email')
-        /*const newCompanie = await prisma.user.create({
-            data: {
-                name: "?",
-                country: 'chile',
-                email: email,
-                password: 'kk',
-                type: "admin"
-            }
-        })*/
+
+        const email = formData.get('email')
+        console.log('Email:', email);
+
+        if (email === null) {
+            console.log('Email no encontrado en FormData')
+            return "an error occurred."
+        }
+
+        console.log(email)
+
     } catch (error) {
         return "an error occurred."
     }

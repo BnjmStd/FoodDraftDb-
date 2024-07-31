@@ -6,7 +6,11 @@ import { useActionState } from 'react';
 
 export default function SignUp() {
 
-    const [state, action, isPending] = useActionState<any>(createNew, null)
+    const [
+        state, 
+        action, 
+        isPending
+    ] = useActionState(createNew, null)
 
     return (
         <section className="bg-gray-50 w-full">
@@ -122,7 +126,7 @@ export default function SignUp() {
                             </p>
                         </form>
                         {isPending && <p>Loading ...</p>}
-                        {state && <p className='text-red-500'>Loading ...{state}</p>}
+                        {state && <p className='text-red-500'>{state}</p>}
                     </div>
                 </div>
             </div>
