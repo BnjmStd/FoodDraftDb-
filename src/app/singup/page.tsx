@@ -1,20 +1,25 @@
+'use client'
 import Food from '@/ui/icons/Food';
 import Link from 'next/link';
 import { createNew } from '@/lib/actions/user';
+import { useActionState } from 'react';
 
 export default function SignUp() {
+
+    const [state, action, isPending] = useActionState<any>(createNew, null)
+
     return (
         <section className="bg-gray-50 w-full">
             <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
                 <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
                     <div className="p-6 space-y-4 md:space-y-4 sm:p-8">
                         <p className='text-xl font-bold flex items-center justify-center'>
-                            FoodCraft   <Food />
+                            FoodCraft <Food />
                         </p>
                         <h4 className="text-xl font-bold  tracking-tight text-gray-900 md:text-2xl">
                             Create an account
                         </h4>
-                        <form className="space-y-2 md:space-y-6" action={createNew}>
+                        <form className="space-y-2 md:space-y-6" action={action}>
                             <div>
                                 <label
                                     htmlFor="email"
@@ -96,6 +101,7 @@ export default function SignUp() {
                                 </div>
                             </div>
                             <button
+                                disabled={isPending}
                                 type="submit"
                                 className="w-full text-white bg-blue-500 
                                 hover:bg-blue-700 focus:ring-4 focus:outline-none 
@@ -115,6 +121,8 @@ export default function SignUp() {
                                 </Link>
                             </p>
                         </form>
+                        {isPending && <p>Loading ...</p>}
+                        {state && <p className='text-red-500'>Loading ...{state}</p>}
                     </div>
                 </div>
             </div>

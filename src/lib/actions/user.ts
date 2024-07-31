@@ -36,8 +36,11 @@ export const createNewAdmin = async (formData: FormData) => {
     // redirect("/admin/user")
 }
 
+/*
 
-export const createNew = async (formData: FormData) => {
+
+    // validate fields
+
     const email = formData.get('email')?.toString()
     const password = formData.get('password')?.toString()
     const check = formData.get('check')?.toString()
@@ -49,6 +52,8 @@ export const createNew = async (formData: FormData) => {
     if (password !== confirmPassword) return 
     if (check === undefined) return
 
+    // create user 
+
     const newCompanie = await prisma.user.create({
         data: {
             name: "?",
@@ -59,9 +64,32 @@ export const createNew = async (formData: FormData) => {
         }
     })
 
-    console.log(newCompanie)
+    // create session
 
-    redirect("/")
+    // redirect("/")
+
+
+*/
+
+export const createNew = async (formData: FormData) => {
+    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    try {
+        const email = formData.get('email') as string
+        console.log('email')
+        /*const newCompanie = await prisma.user.create({
+            data: {
+                name: "?",
+                country: 'chile',
+                email: email,
+                password: 'kk',
+                type: "admin"
+            }
+        })*/
+    } catch (error) {
+        return "an error occurred."
+    }
 }
 
 export const login = async (formData: FormData) => {
