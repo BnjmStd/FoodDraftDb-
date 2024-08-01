@@ -4,56 +4,11 @@ import prisma from "./prisma"
 import { validateEmail } from '@/lib/utils/helper'
 import { redirect } from "next/navigation"
 
-interface UserType {
-    ADMIN: "admin";
-    COLLABORATOR: "collaborator";
-    COMPANY: "company";
-    NORMAL: "normal";
-}
-
 export const createNewAdmin = async (formData: FormData) => {
-    const email = formData.get('email')?.toString()
-    const password = formData.get('password')?.toString()
-    const check = formData.get('check')?.toString()
-    const confirmPassword = formData.get('confirmPassword')?.toString()
-    const country = 'chile'
-
-    if (!email || !password || !check || !country) return
-    if (!validateEmail(email)) return 
-
-    const newCompanie = await prisma.user.create({
-        data: {
-            name: "?",
-            country: country,
-            email: email,
-            password: password,
-            type: "admin"
-        }
-    })
-
-    console.log(newCompanie)
-
-    // redirect("/admin/user")
+    console.log(formData)
 }
 
 /*
-
-
-    // validate fields
-
-    const email = formData.get('email')?.toString()
-    const password = formData.get('password')?.toString()
-    const check = formData.get('check')?.toString()
-    const confirmPassword = formData.get('confirmPassword')?.toString()
-    const country = 'chile'
-
-    if (!email || !password || !check || !country) return
-    if (!validateEmail(email)) return 
-    if (password !== confirmPassword) return 
-    if (check === undefined) return
-
-    // create user 
-
     const newCompanie = await prisma.user.create({
         data: {
             name: "?",
@@ -67,28 +22,63 @@ export const createNewAdmin = async (formData: FormData) => {
     // create session
 
     // redirect("/")
-
-
 */
 
-export const createNew = async (prevState, formData: FormData) => {
-    
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log('FormData:', formData) 
+export const createNew = async (prev, formData: FormData) => {
     try {
+        const errors: { 
+            [key: string]: string 
+        } = {}
 
-        const email = formData.get('email')
-        console.log('Email:', email);
+        // email
 
-        if (email === null) {
-            console.log('Email no encontrado en FormData')
-            return "an error occurred."
+        const email = formData.get('email') as string | null
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            errors.email = 'Invalid email format or missing email'
         }
 
-        console.log(email)
+        // password
+
+        const pwd = formData.get('password') as string | null
+        const pwdConfirm = formData.get('confirmPassword') as string | null
+
+        if (!pwd || pwd.length < 8) {
+            errors.password = 'Password must be at least 8 characters long'
+        }
+
+        if (pwd !== pwdConfirm) {
+            errors.confirmPassword = 'Passwords do not match'
+        }
+
+        // checkbox
+
+        const checkBox = formData.get('check') as string | null
+
+        if (checkBox !== 'checked') {
+            errors.checkBox = 'not checked'
+        }
+
+        if (!checkBox) {
+            errors.checkBox = 'not checked'
+        }
+
+        if (Object.keys(errors).length > 0) {
+            
+            return { 
+                success: false, 
+                errors 
+            }
+        }
+
+        return { success: true }
 
     } catch (error) {
-        return "an error occurred."
+
+        return {
+            success: false,
+            error: "an error occurred."
+        }
     }
 }
 
@@ -110,7 +100,7 @@ export const login = async (formData: FormData) => {
     //const isPasswordValid = await bcrypt.compare(password, user.password);
 
     //if (!isPasswordValid) {
-        //throw new Error('Contraseña incorrecta');
+    //throw new Error('Contraseña incorrecta');
     //}
 
     // Generar un token JWT

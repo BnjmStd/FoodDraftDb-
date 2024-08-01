@@ -5,17 +5,11 @@ import Link from "next/link";
 import { useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import "./Nav.css"
-
 export default function Login() {
 
-    const [password, setPassword] = useState('')
-    const handleChangePwd = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
-    const [error, setError] = useState<string | null>(null)
+    const error = false
+
     const [isShowPassword, setIsShowPassword] = useState(false)
-    const toggleShowPassword = () => {
-        setIsShowPassword(!isShowPassword)
-    }
 
     return (
             <div className="flex items-center justify-center mt-28">
@@ -73,8 +67,10 @@ export default function Login() {
                             </label>
 
                             <span
-                                className="text-primary cursor-pointer "
-                                onClick={toggleShowPassword}
+                                className="text-primary h-2 cursor-pointer"
+                                onClick={() => {
+                                    setIsShowPassword(!isShowPassword)}
+                                }
                             >
                                 {
                                     isShowPassword
@@ -86,7 +82,7 @@ export default function Login() {
 
                         {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
 
-                        <button type="submit" className="bg-green-300 p-2 rounded-md hover:bg-green-500">
+                        <button type="submit" className="bg-green-300 p-2 rounded-md border border-neutral-900 hover:bg-green-500 w-full">
                             Login
                         </button>
                         <p className="text-sm text-center mt-4">
