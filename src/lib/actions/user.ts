@@ -1,38 +1,21 @@
 "use server"
 
 import prisma from "./prisma"
-import { validateEmail } from '@/lib/utils/helper'
-import { redirect } from "next/navigation"
+const bcrypt = require('bcryptjs');
 
 export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
 }
 
-/*
-    const newCompanie = await prisma.user.create({
-        data: {
-            name: "?",
-            country: country,
-            email: email,
-            password: password,
-            type: "admin"
-        }
-    })
-
-    // create session
-
-    // redirect("/")
-*/
-
-export const createNew = async (prev, formData: FormData) => {
+export const createNew = async (prev: null, formData: FormData) => {
     try {
-        const errors: { 
-            [key: string]: string 
+        const errors: {
+            [key: string]: string
         } = {}
 
         // email
 
-        const email = formData.get('email') as string | null
+        const email = formData.get('email') as string
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             errors.email = 'Invalid email format or missing email'
@@ -64,12 +47,31 @@ export const createNew = async (prev, formData: FormData) => {
         }
 
         if (Object.keys(errors).length > 0) {
-            
-            return { 
-                success: false, 
-                errors 
+
+            return {
+                success: false,
+                errors
             }
         }
+
+        const salt = await bcrypt.genSalt(5);
+        const hashedPwd = await bcrypt.hash(pwd, salt)
+
+        console.log(hashedPwd)
+
+        const newUser = await prisma.user.create({
+            data: {
+                name: '',  
+                country: '',
+                email: email,
+                password: hashedPwd,
+                type: ''
+            }
+        })
+    
+        // create session
+    
+        // redirect("/")
 
         return { success: true }
 

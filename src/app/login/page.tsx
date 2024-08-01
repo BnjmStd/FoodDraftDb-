@@ -82,12 +82,15 @@ export default function Login() {
 
                         {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
 
-                        <button type="submit" className="bg-green-300 p-2 rounded-md border border-neutral-900 hover:bg-green-500 w-full">
+                        <button type="submit" className=" text-white p-2 rounded-md border border-neutral-900 bg-blue-500 
+                                hover:bg-blue-700 w-full">
                             Login
                         </button>
                         <p className="text-sm text-center mt-4">
                             not registered yet?
-                            <Link href={'/singup'} className="font-medium text-bold cursor-pointer text-red-500 hover:text-blue-600"> Create account </Link>
+                            <Link 
+                                href={'/singup'} 
+                                className="font-medium text-bold cursor-pointer text-red-500 hover:text-blue-600"> Create account </Link>
                         </p>
                     </form>
                 </div>
