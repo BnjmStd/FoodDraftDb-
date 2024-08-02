@@ -7,7 +7,7 @@ export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
 }
 
-export const createNew = async (prev: null, formData: FormData) => {
+export const createNew = async (prev, formData: FormData) => {
     try {
         const errors: {
             [key: string]: string
