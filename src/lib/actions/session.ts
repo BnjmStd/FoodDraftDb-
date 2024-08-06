@@ -1,4 +1,5 @@
 'use server'
+import 'server-only'
 
 import { SignJWT, jwtVerify } from "jose";
 import { redirect } from "next/navigation";
@@ -6,7 +7,6 @@ import { cookies } from "next/headers";
 
 // conv el secret en un Uint8Array para la firma
 const key = new TextEncoder().encode(process.env.JWT_SECRET)
-
 
 const cookie = {
     name: 'session',
@@ -44,17 +44,12 @@ export async function createSession(userId: string | null | number) {
     const expires = new Date(Date.now() + cookie.duration)
     const session = await encrypt({ userId, expires })
 
-    cookies().set({
-        name: cookie.name,
-        value: session,
-        httpOnly: cookie.options.httpOnly,
-        secure: cookie.options.secure,
-        sameSite: cookie.options.sameSite,
-        path: cookie.options.path,
-        expires: expires,
-      });
+    cookies().set(cookie.name, session, {
+        ...cookie.options,
+        expires
+    })
 
-    redirect('/admin')
+    return "/admin"
 }
 
 export async function varifySession() {

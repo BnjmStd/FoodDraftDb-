@@ -97,7 +97,6 @@ const CategoryComponent = () => {
                         <Table
                             columns={column}
                             onEdit={() => { }}
-                            onDelete={() => { }}
                             data={categorys}
                         />
                     )}
@@ -185,7 +184,6 @@ const FoodComponent = () => {
                         <Table
                             columns={column}
                             onEdit={() => { }}
-                            onDelete={() => { }}
                             data={foods}
                         />
                     )}
@@ -264,7 +262,6 @@ const UserComponent = () => {
                         <Table
                             columns={column}
                             onEdit={() => { }}
-                            onDelete={() => { }}
                             data={users}
                         />
                     )}

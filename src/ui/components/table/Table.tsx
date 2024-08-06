@@ -3,16 +3,16 @@ import {
     FaEdit 
 } from 'react-icons/fa';
 
+import { deleteUserById } from "@/lib/actions/user"
+
 export default function Table ({ 
     columns, 
     data,
     onEdit,
-    onDelete
 }:{
     columns: string[];
     data: any[];
     onEdit: (rowIndex: number) => void;
-    onDelete: (rowIndex: number) => void;
 }) {
     return (
         <table className="min-w-full divide-y divide-gray-200">
@@ -44,7 +44,7 @@ export default function Table ({
                                 <FaEdit />
                             </button>
                             <button 
-                                onClick={() => onDelete(rowIndex)}
+                                
                                 className="text-red-600 hover:text-red-900 p-2 hover:bg-gray-200 rounded-md"
                             >
                                 <FaTrashAlt />

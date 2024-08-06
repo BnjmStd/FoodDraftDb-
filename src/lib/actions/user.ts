@@ -1,6 +1,9 @@
 "use server"
 
+import { redirect } from "next/navigation";
 import prisma from "./prisma"
+import { createSession } from "./session";
+
 const bcrypt = require('bcryptjs');
 
 export const createNewAdmin = async (formData: FormData) => {
@@ -8,80 +11,69 @@ export const createNewAdmin = async (formData: FormData) => {
 }
 
 export const createNew = async (prev, formData: FormData) => {
-    try {
-        const errors: {
-            [key: string]: string
-        } = {}
-
-        // email
-
-        const email = formData.get('email') as string
-
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            errors.email = 'Invalid email format or missing email'
-        }
-
-        // password
-
-        const pwd = formData.get('password') as string | null
-        const pwdConfirm = formData.get('confirmPassword') as string | null
-
-        if (!pwd || pwd.length < 8) {
-            errors.password = 'Password must be at least 8 characters long'
-        }
-
-        if (pwd !== pwdConfirm) {
-            errors.confirmPassword = 'Passwords do not match'
-        }
-
-        // checkbox
-
-        const checkBox = formData.get('check') as string | null
-
-        if (checkBox !== 'checked') {
-            errors.checkBox = 'not checked'
-        }
-
-        if (!checkBox) {
-            errors.checkBox = 'not checked'
-        }
-
-        if (Object.keys(errors).length > 0) {
-
-            return {
-                success: false,
-                errors
-            }
-        }
-
-        const salt = await bcrypt.genSalt(5);
-        const hashedPwd = await bcrypt.hash(pwd, salt)
-
-        console.log(hashedPwd)
-
-        const newUser = await prisma.user.create({
-            data: {
-                name: '',  
-                country: '',
-                email: email,
-                password: hashedPwd,
-                type: ''
-            }
-        })
     
-        // create session
-    
-        // redirect("/")
+    const errors: {
+        [key: string]: string
+    } = {}
 
-        return { success: true }
+    // email
 
-    } catch (error) {
+    const email = formData.get('email') as string
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = 'Invalid email format or missing email'
+    }
+
+    // password
+
+    const pwd = formData.get('password') as string | null
+    const pwdConfirm = formData.get('confirmPassword') as string | null
+
+    if (!pwd || pwd.length < 8) {
+        errors.password = 'Password must be at least 8 characters long'
+    }
+
+    if (pwd !== pwdConfirm) {
+        errors.confirmPassword = 'Passwords do not match'
+    }
+
+    // checkbox
+
+    const checkBox = formData.get('check') as string | null
+
+    if (checkBox !== 'checked') {
+        errors.checkBox = 'not checked'
+    }
+
+    if (!checkBox) {
+        errors.checkBox = 'not checked'
+    }
+
+    if (Object.keys(errors).length > 0) {
 
         return {
             success: false,
-            error: "an error occurred."
+            errors
         }
     }
+
+    const salt = await bcrypt.genSalt(5);
+    const hashedPwd = await bcrypt.hash(pwd, salt)
+
+    const newUser = await prisma.user.create({
+        data: {
+            name: '',
+            country: '',
+            email: email,
+            password: hashedPwd,
+            type: ''
+        }
+    })
+
+    // create session
+
+    const route = await createSession(newUser.id)
+    redirect(`${route}`)
 }
 
 export const login = async (formData: FormData) => {
@@ -121,4 +113,24 @@ export const getAllUser = () => {
             console.error('Error fetching users:', error);
             return [];
         });
-};
+}
+
+export const deleteUserById = async (userId: number) => {
+
+    try {
+        console.log('hola')
+        const deletedUser = await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+
+        console.log('Usuario eliminado:', deletedUser);
+
+    } catch (error) {
+
+        console.error('Error al eliminar el usuario:', error);
+
+    }
+
+}
