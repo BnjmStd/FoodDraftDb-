@@ -52,7 +52,7 @@ export async function createSession(userId: string | null | number) {
     return "/admin"
 }
 
-export async function varifySession() {
+export async function verifySession() {
     const cookiep = cookies().get(cookie.name)?.value
 
     if (!cookiep) return 
@@ -67,5 +67,6 @@ export async function varifySession() {
 }
 
 export async function deleteSession() {
-
+    cookies().delete(cookie.name)
+    redirect('/')
 }

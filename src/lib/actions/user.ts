@@ -1,17 +1,29 @@
 "use server"
 
-import { redirect } from "next/navigation";
-import prisma from "./prisma"
-import { createSession } from "./session";
-
 const bcrypt = require('bcryptjs');
+
+
+import prisma from "./prisma"
+
+import { 
+    cache 
+} from "react"
+
+import { 
+    createSession, 
+    verifySession 
+} from "./session"
+
+import { 
+    redirect 
+} from "next/navigation"
 
 export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
 }
 
 export const createNew = async (prev, formData: FormData) => {
-    
+
     const errors: {
         [key: string]: string
     } = {}
@@ -76,44 +88,66 @@ export const createNew = async (prev, formData: FormData) => {
     redirect(`${route}`)
 }
 
-export const login = async (formData: FormData) => {
+export const login = async (prev, formData: FormData) => {
+
+    const errors: { 
+        [key: string]: string 
+    } = {}
 
     const email = formData.get('floating_email')?.toString()
     const password = formData.get('floating_password')?.toString()
 
-    // Buscar el usuario por email
+    // Validación del email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.form = 'Invalid email format or missing email'
+    }
+
+    // Validación de que el usuario existe
     const user = await prisma.user.findUnique({
         where: { email: email },
     });
 
-    if (!user) {
-        throw new Error('Usuario no encontrado');
+    // Validación de la contraseña
+    if (user && password) {
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordValid) {
+            errors.form = 'incorrect data'
+        }
     }
 
-    // Verificar la contraseña
-    //const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!user) {
+        errors.form = 'incorrect data'
+    }
 
-    //if (!isPasswordValid) {
-    //throw new Error('Contraseña incorrecta');
-    //}
+    if (Object.keys(errors).length > 0) {
+        return {
+            success: false,
+            errors
+        }
+    }
 
-    // Generar un token JWT
-    //const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-    console.log('login')
-    return {
-        user,
-        //token,
-    };
+    // create session
+
+    const route = await createSession(user!.id)
+    redirect(`${route}`)
 }
 
-export const getAllUser = () => {
-    return prisma.user.findMany()
-        .then(users => users)
-        .catch(error => {
-            console.error('Error fetching users:', error);
-            return [];
-        });
-}
+export const getAllUser = cache(
+
+    async () => {
+
+        const isUser = await verifySession()
+
+        return prisma.user.findMany()
+            .then(users => users)
+            .catch(error => {
+                console.error('Error fetching users:', error);
+                return [];
+            });
+    }
+
+)
 
 export const deleteUserById = async (userId: number) => {
 

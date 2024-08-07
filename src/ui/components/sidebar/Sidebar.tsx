@@ -3,6 +3,7 @@ import { BsNutFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
 import { MdFastfood, MdCategory } from "react-icons/md";
 import "./sidebar.css"
+import { deleteSession } from "@/lib/actions/session";
 export default function Sidebar({ 
     setContent 
 }: {
@@ -39,7 +40,7 @@ export default function Sidebar({
                 />
                 <Button 
                     icon={<IoLogOut color={`${color}`} />} 
-                    onClick={() => setContent('Logout')} 
+                    onClick={() => deleteSession()} 
                     content="Logout"
                 />
             </footer>

@@ -2,19 +2,23 @@
 
 import { login } from "@/lib/actions/user";
 import Link from "next/link";
-import { useState } from "react"
+import { useActionState, useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
 
-    const error = false
+    const [
+        state,
+        action,
+        isPending
+    ] = useActionState(login, null)
 
     const [isShowPassword, setIsShowPassword] = useState(false)
 
     return (
             <div className="flex items-center justify-center mt-28">
                 <div className="w-96 border rounded bg-while px-7 py-10">
-                    <form action={login}>
+                    <form action={action}>
                         <h4 className="text-2xl mb-2 text-center">Login</h4>
 
                         <div className="relative z-0 w-full mb-5 group">
@@ -80,9 +84,12 @@ export default function Login() {
                             </span>
                         </div>
 
-                        {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+                        {state?.errors?.form &&
+                                    <p className='error mb-5'>{state.errors.form}</p>}
 
-                        <button type="submit" className=" text-white p-2 rounded-md border border-neutral-900 bg-blue-500 
+                        <button 
+                            disabled={isPending}
+                            type="submit" className=" text-white p-2 rounded-md border border-neutral-900 bg-blue-500 
                                 hover:bg-blue-700 w-full">
                             Login
                         </button>
