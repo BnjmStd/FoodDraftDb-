@@ -1,12 +1,14 @@
 'use client'
 
-import CardSeccion from "@/ui/components/card/CardSeccion";
-
 /* components */
 import Footer from "@/ui/components/footer/Footer";
 import Spinner from "@/ui/components/loading/Spinner";
 import Hero from "@/ui/components/nav/Hero";
-import SearchInputFoods from "@/ui/components/SeccionFoods/SeccionFoods";
+
+/* search */
+import HomeContent from "@/ui/pages/Home/Home";
+import FoodContent from "@/ui/pages/Food/Food";
+import CompanieContent from "@/ui/pages/Companie/Companie";
 
 /* react */
 import {
@@ -14,29 +16,6 @@ import {
     Suspense,
     useState
 } from "react"
-
-const HomeContent = () => {
-    return (
-        <h1>HomeContnet</h1>
-    )
-}
-
-const FoodContent = () => {
-    return (
-        <div className="flex flex-col">
-            <SearchInputFoods />
-            <CardSeccion />
-        </div>
-    )
-}
-
-const CompanieContent = () => {
-    return (
-        <>
-            <h1>Hola</h1>
-        </>
-    )
-}
 
 const ContentComponent = ({
     type
