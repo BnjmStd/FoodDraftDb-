@@ -1,14 +1,14 @@
 'use client'
 
 /* components */
-import Footer from "@/ui/components/footer/Footer";
-import Spinner from "@/ui/components/loading/Spinner";
-import Hero from "@/ui/components/nav/Hero";
+import Footer from "@/ui/components/footer/Footer"
+import Spinner from "@/ui/components/loading/Spinner"
+import Hero from "@/ui/components/nav/Hero"
 
 /* search */
-import HomeContent from "@/ui/pages/Home/Home";
-import FoodContent from "@/ui/pages/Food/Food";
-import CompanieContent from "@/ui/pages/Companie/Companie";
+import HomeContent from "@/ui/pages/Home/Home"
+import FoodContent from "@/ui/pages/Food/Food"
+import AboutContent from "@/ui/pages/About/About"
 
 /* react */
 import {
@@ -27,16 +27,18 @@ const ContentComponent = ({
             return <HomeContent />
         case '/Foods':
             return <FoodContent />
-        case '/Companies':
-            return <CompanieContent />
+        case '/About':
+            return <AboutContent />
+        case '/Pricing':
+            return <AboutContent />
         default:
             return <div>Contenido no encontrado.</div>;
     }
-};
+}
 
 const LazyContentComponent = lazy(() => Promise.resolve({
     default: ContentComponent
-}));
+}))
 
 const MainContent = ({
     content
@@ -48,7 +50,7 @@ const MainContent = ({
             <LazyContentComponent type={content} />
         </Suspense>
     </div>
-);
+)
 
 export default function Home() {
 

@@ -10,7 +10,7 @@ export default function hero({
     setContent: React.Dispatch<React.SetStateAction<string>>
 }) {
     
-    const SECCION = ["Home", "Foods", "About", "Blog", "Pricing"]
+    const SECCION = ["Home", "Foods", "About", "Pricing"]
 
     return (
         <header id="landing-header"

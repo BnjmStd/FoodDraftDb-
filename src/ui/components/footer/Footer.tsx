@@ -9,7 +9,7 @@ export default function Footer() {
     return (
         <footer
             className="flex flex-col gap-2 justify-center items-center
-                bg-neutral-600 p-4 text-white min-w-[400px]">
+                bg-neutral-600 p-4 text-white min-w-[400px] rounded-md">
 
             <p>{myCompany} - <strong> {country} </strong></p>
 

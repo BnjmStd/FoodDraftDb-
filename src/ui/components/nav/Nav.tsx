@@ -4,8 +4,6 @@ import {
     useState
 } from "react";
 
-import { usePathname } from 'next/navigation'
-
 export default function Nav({
     setContent,
     seccion
@@ -14,14 +12,12 @@ export default function Nav({
     seccion: string[]
 }) {
 
-    const namePath = seccion.indexOf(usePathname().split('/')[1]); // devuelve -1
-
-    const [activeIndex, setActiveIndex] = useState<number | null>(namePath > 0 ? namePath : 0);
+    const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
     const handleSetActive = (index: number, content: string) => {
         setActiveIndex(index);
         setContent(content)
-    };
+    }
 
     return (
         <>
@@ -29,13 +25,11 @@ export default function Nav({
                 <ul
                     className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
                     [&>li>a]:duration-500 [&>li>a]:inline-block 
-                    [&>li>a]:px-4 [&>li>a]:py-2`}
+                    [&>li>a]:px-4 [&>li>a]:py-2 cursor-pointer`}
                 >
                     {seccion.map((item, index) => (
                         <li key={index}>
                             <a
-                                //href={`${index == 0 ? "/" : `/${item}`}`}
-                                href="#"
                                 onClick={() => handleSetActive(index, index == 0 ? "/" : `/${item}`)}
                                 className={activeIndex === index ? "underline-custom" : ""}
                             >
@@ -47,7 +41,7 @@ export default function Nav({
                 <MenuBackdrop />
             </nav>
         </>
-    );
+    )
 }
 
 const MenuBackdrop = () => {
@@ -69,7 +63,7 @@ const MenuBackdrop = () => {
                     menuBackdrop.style.opacity = "1";
                     menuBackdrop.style.visibility = "visible";
                 }
-            };
+            }
 
             const handleMouseLeave = () => {
                 const menuBackdrop = menuBackdropRef.current;
@@ -78,7 +72,7 @@ const MenuBackdrop = () => {
                     menuBackdrop.style.opacity = "0";
                     menuBackdrop.style.visibility = "hidden";
                 }
-            };
+            }
 
             item.addEventListener("mouseenter", handleMouseEnter);
             item.addEventListener("mouseleave", handleMouseLeave);
@@ -86,9 +80,9 @@ const MenuBackdrop = () => {
             return () => {
                 item.removeEventListener("mouseenter", handleMouseEnter);
                 item.removeEventListener("mouseleave", handleMouseLeave);
-            };
-        });
-    }, []);
+            }
+        })
+    }, [])
 
     return (
         <div
@@ -102,4 +96,4 @@ const MenuBackdrop = () => {
                     "
         />
     )
-};
+}
