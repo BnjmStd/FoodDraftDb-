@@ -14,7 +14,7 @@ export default function hero({
 
     return (
         <header id="landing-header"
-            className="px-4 py-2 m-0 text-center flex items-center fixed top-0 w-full 
+            className="px-3 py-6 m-0 text-center flex items-center fixed top-0 w-full 
             justify-between text-black z-40 border-b-2 text-sm"
         >
             <Logo />
