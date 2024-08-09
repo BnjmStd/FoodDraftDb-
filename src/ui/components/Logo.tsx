@@ -1,7 +1,9 @@
+import "./logo.css"
+
 export default function Logo() {
     return (
-        <span className="text-center">
-            FoodCraft
-        </span>
+        <figure className="figure-hero">
+            <img src="/Logo.png" alt="Logo FoodCraft" />
+        </figure>       
     )
 }

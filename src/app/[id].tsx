@@ -1,5 +1,7 @@
 'use client'
 
+import { useRouter } from 'next/router'
+
 /* components */
 import Footer from "@/ui/components/footer/Footer"
 import Spinner from "@/ui/components/loading/Spinner"
@@ -54,7 +56,14 @@ const MainContent = ({
 
 export default function Home() {
 
+    const router = useRouter();
+    const { id } = router.query;
+
     const [content, setContent] = useState('/')
+
+    const handleNavigation = (path : string = "/") => {
+        router.push(path);
+    };
 
     return (
         <>

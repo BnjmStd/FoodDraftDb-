@@ -1,0 +1,7 @@
+.figure-hero {
+    img {
+        object-fit: cover;
+        width: 50%;
+        clip-path: inset(30% 20% 30% 20%);
+    }
+}

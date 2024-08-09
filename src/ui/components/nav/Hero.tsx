@@ -14,14 +14,14 @@ export default function hero({
 
     return (
         <header id="landing-header"
-            className="px-3 py-6 m-0 text-center flex items-center fixed top-0 w-full 
+            className="h-24 px-4 m-0 text-center flex items-center fixed top-0 w-full 
             justify-between text-black z-40 border-b-2 text-sm"
         >
             <Logo />
             <Nav seccion={SECCION} setContent={setContent} />
 
             {/* botones */}
-            <div className="hidden md:flex md:flex-row gap-2 ">
+            <div className="hidden md:flex md:flex-row gap-2">
                 <Link
                     href={"/login"}
                     className="bg-black gap-2 text-white p-2 rounded-md 
