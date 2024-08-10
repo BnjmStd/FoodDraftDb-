@@ -1,14 +1,12 @@
+'use client'
+
 import { FaUser } from "react-icons/fa";
 import { BsNutFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
 import { MdFastfood, MdCategory } from "react-icons/md";
 import "./sidebar.css"
 import { deleteSession } from "@/lib/actions/session";
-export default function Sidebar({ 
-    setContent 
-}: {
-    setContent: (content: string) => void 
-}) {
+export default function Sidebar() {
 
     const color = 'pink'
 
@@ -18,24 +16,24 @@ export default function Sidebar({
             <main className="flex flex-col space-y-4">
                 <Button 
                     icon={<FaUser color={`${color}`} />} 
-                    onClick={() => setContent('Usuarios')} 
+                    onClick={() => {}} 
                     content="User"
                 />
                 <Button 
                     icon={<MdFastfood color={`${color}`} />} 
-                    onClick={() => setContent('Comida')}
+                    onClick={() => {}}
                     content="Food"
                 />
                 <Button 
                     icon={<MdCategory color={`${color}`} />} 
-                    onClick={() => setContent('Category')}
+                    onClick={() => {}}
                     content="Category"     
                 />
             </main>
             <footer className="flex flex-col space-y-4 pb-5">
                 <Button 
                     icon={<BsNutFill color={`${color}`} />} 
-                    onClick={() => setContent('Setting')}
+                    onClick={() => {}}
                     content="Setting"
                 />
                 <Button 

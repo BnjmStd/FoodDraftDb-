@@ -2,7 +2,6 @@
 
 const bcrypt = require('bcryptjs');
 
-
 import prisma from "./prisma"
 
 import { 

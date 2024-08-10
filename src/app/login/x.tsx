@@ -3,31 +3,33 @@ import { ErrorContext } from "@/lib/context/error"
 
 const X = () => {
 
-    const { error, setError, clearError } = use(ErrorContext)
+    const { setError } = use(ErrorContext)
 
     const addError = () => {
-        setError('formError', 'Este es un mensaje de error.');
-    };
 
-    const removeError = () => {
-        clearError('formError');
-    };
+        setError({
+            message: 'This is an error message',
+            type: 'error'
+        })
+        
+        setError({ 
+            message: 'This is an error message',
+            type: 'warning'
+        })
+
+        setError({ 
+            message: 'This is an error message',
+            type: 'info'
+        })
+
+    }
 
     return (
-        <div>
-            {error['formError'] ? (
-                <>
-                    <p>{error['formError']}</p>
-                    <button onClick={removeError}>Limpiar Error</button>
-                </>
-            ) : (
-                <>
-                    <p>No hay errores.</p>
-                    <button onClick={addError}>Agregar Error</button>
-                </>
-            )}
-        </div>
-    );
+        <>
+            <button className="bg-red-600 px-3 rounded-md cursor-pointer
+            hover:bg-red-400" onClick={addError}>Agregar Error</button>
+        </>
+    )
 }
 
 export default X

@@ -340,7 +340,7 @@ export default function Page() {
 
     return (
         <div className="flex m-20 flex-grow border overflow-auto items-center justify-center">
-            <SidebarMemo setContent={setContent} />
+            <SidebarMemo  />
             <MainContent content={content} />
         </div>
     );

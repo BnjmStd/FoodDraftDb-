@@ -4,16 +4,26 @@ import {
     createContext,
     useState,
     useCallback
-} from 'react'
+} from 'react';
+
+interface Error {
+    id?: string;
+    message: string;
+    type: 'error' | 'warning' | 'info';
+}
 
 interface ErrorContextType {
-    error: { [key: string]: string };
-    setError: (key: string, message: string) => void;
-    clearError: (key: string) => void;
+    errors: Error[];
+    setError: (error: Error) => void;
+    clearError: (id: string) => void;
+}
+
+function generateUniqueId() {
+    return 'id-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
 }
 
 export const ErrorContext = createContext<ErrorContextType>({
-    error: {},
+    errors: [],
     setError: () => {},
     clearError: () => {}
 });
@@ -23,21 +33,22 @@ export function ErrorContextProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [error, setErrorState] = useState<{ [key: string]: string }>({});
+    const [errors, setErrors] = useState<Error[]>([]);
 
-    const setError = useCallback((key: string, message: string) => {
-        setErrorState(prevError => ({ ...prevError, [key]: message }));
+    const setError = useCallback((error: Error) => {
+        const newError = {
+            id: generateUniqueId(),
+            ...error
+        };
+        setErrors(prevErrors => [...prevErrors, newError]);
     }, []);
 
-    const clearError = useCallback((key: string) => {
-        setErrorState(prevError => {
-            const { [key]: _, ...rest } = prevError;
-            return rest;
-        });
+    const clearError = useCallback((id: string) => {
+        setErrors(prevErrors => prevErrors.filter(error => error.id !== id));
     }, []);
 
     return (
-        <ErrorContext.Provider value={{ error, setError, clearError }}>
+        <ErrorContext.Provider value={{ errors, setError, clearError }}>
             {children}
         </ErrorContext.Provider>
     );
