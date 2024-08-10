@@ -1,10 +1,10 @@
 'use client'
 
-import Food from '@/ui/icons/Food'
 import Link from 'next/link'
 import { createNew } from '@/lib/actions/user'
 import { useActionState, useState } from 'react'
 import { FaEye, FaEyeSlash } from "react-icons/fa"
+import { MdFastfood } from 'react-icons/md'
 
 export default function SignUp() {
 
@@ -22,7 +22,7 @@ export default function SignUp() {
                 <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
                     <div className=" space-y-4 md:space-y-2 sm:p-8">
                         <p className='text-xl font-bold flex items-center justify-center'>
-                            FoodCraft <Food />
+                            FoodCraft <MdFastfood />
                         </p>
                         <h4 className="text-xl font-bold text-center text-gray-900 md:text-2xl">
                             Create an account

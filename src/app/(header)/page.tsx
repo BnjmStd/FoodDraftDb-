@@ -13,8 +13,6 @@ export default function HomeContent () {
     const myRef = useRef<HTMLDivElement | null>(null)
     const [myElementIsVisible, setMyElementIsVisible] = useState<boolean>(false)
 
-    
-
     useEffect(() => {
 
         const observer = new IntersectionObserver((entries) => {

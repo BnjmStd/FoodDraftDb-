@@ -7,15 +7,12 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
     return (
-
         <div className="flex m-20 flex-grow border overflow-auto items-center justify-center">
             <Sidebar />
             <Suspense fallback={<Spinner />}>
                 {children}
             </Suspense>
         </div>
-
     )
 }
