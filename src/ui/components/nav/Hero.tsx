@@ -4,11 +4,7 @@ import Link from "next/link";
 import "./HeroStyle.css"
 import NavbarSm from "./NavbarSm";
 
-export default function hero({
-    setContent
-}: {
-    setContent: React.Dispatch<React.SetStateAction<string>>
-}) {
+export default function hero() {
     
     const SECCION = ["Home", "Foods", "About", "Pricing"]
 
@@ -18,7 +14,7 @@ export default function hero({
             justify-between text-black z-40 border-b-2 text-sm"
         >
             <Logo />
-            <Nav seccion={SECCION} setContent={setContent} />
+            <Nav seccion={SECCION} />
 
             {/* botones */}
             <div className="hidden md:flex md:flex-row gap-2">

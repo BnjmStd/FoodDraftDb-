@@ -2,21 +2,26 @@ import {
     useEffect,
     useRef,
     useState
-} from "react";
+} from "react"
+
+import { useRouter } from "next/navigation"
 
 export default function Nav({
-    setContent,
     seccion
 } : {
-    setContent: React.Dispatch<React.SetStateAction<string>>
     seccion: string[]
 }) {
 
-    const [activeIndex, setActiveIndex] = useState<number | null>(0);
+    const router = useRouter()
 
-    const handleSetActive = (index: number, content: string) => {
-        setActiveIndex(index);
-        setContent(content)
+    const [activeIndex, setActiveIndex] = useState<number | null>(0)
+
+    const handleSetActive = (index: number) => {
+        setActiveIndex(index)
+        const path = seccion[index].toLowerCase() === "home" 
+            ? "/" 
+            : `/${seccion[index].toLowerCase()}`
+        router.push(path)
     }
 
     return (
@@ -30,7 +35,7 @@ export default function Nav({
                     {seccion.map((item, index) => (
                         <li key={index}>
                             <a
-                                onClick={() => handleSetActive(index, index == 0 ? "/" : `/${item}`)}
+                                onClick={() => handleSetActive(index)}
                                 className={activeIndex === index ? "underline-custom" : ""}
                             >
                                 {item}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { poppins } from "@/ui/fonts";
 import "./globals.css";
+import { ErrorContextProvider } from "@/lib/context/error";
 
 export const metadata: Metadata = {
     title: "FoodCraft-DB",
@@ -14,10 +15,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="es">
-            <body
-                className={`${poppins.className}`}
-            >
-                {children}
+            <body className={`${poppins.className}`}>
+                <ErrorContextProvider>
+                    {children}
+                </ErrorContextProvider>
             </body>
         </html>
     );

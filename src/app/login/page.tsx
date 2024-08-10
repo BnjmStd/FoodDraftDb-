@@ -4,6 +4,7 @@ import { login } from "@/lib/actions/user";
 import Link from "next/link";
 import { useActionState, useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import X from "./x";
 
 export default function Login() {
 
@@ -17,6 +18,7 @@ export default function Login() {
 
     return (
             <div className="flex items-center justify-center mt-28">
+                <X />
                 <div className="w-96 border rounded bg-while px-7 py-10">
                     <form action={action}>
                         <h4 className="text-2xl mb-2 text-center">Login</h4>
