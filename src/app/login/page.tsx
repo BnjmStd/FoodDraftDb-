@@ -1,9 +1,18 @@
 'use client'
 
-import { login } from "@/lib/actions/user";
 import Link from "next/link";
-import { useActionState, useState } from "react"
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+import {
+    FaEye,
+    FaEyeSlash
+} from "react-icons/fa";
+
+import {
+    useActionState,
+    useState
+} from "react"
+
+import { login } from "@/lib/actions/user";
 
 export default function Login() {
 

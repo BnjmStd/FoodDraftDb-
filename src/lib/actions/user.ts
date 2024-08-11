@@ -4,18 +4,19 @@ const bcrypt = require('bcryptjs');
 
 import prisma from "./prisma"
 
-import { 
-    cache 
+import {
+    cache
 } from "react"
 
-import { 
-    createSession, 
-    verifySession 
+import {
+    createSession,
+    verifySession
 } from "./session"
 
-import { 
-    redirect 
+import {
+    redirect
 } from "next/navigation"
+import { cookies } from "next/headers";
 
 export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
@@ -89,8 +90,8 @@ export const createNew = async (prev, formData: FormData) => {
 
 export const login = async (prev, formData: FormData) => {
 
-    const errors: { 
-        [key: string]: string 
+    const errors: {
+        [key: string]: string
     } = {}
 
     const email = formData.get('floating_email')?.toString()
@@ -129,6 +130,7 @@ export const login = async (prev, formData: FormData) => {
     // create session
 
     const route = await createSession(user!.id)
+
     redirect(`${route}`)
 }
 
@@ -147,6 +149,26 @@ export const getAllUser = cache(
     }
 
 )
+
+export const msgWelcome = async () => {
+
+    const res = await verifySession()
+
+    return prisma.user.findUnique({
+        where: {
+            id: res?.userId as number, 
+        },
+        select: {
+            email: true, 
+        },
+    })
+        .then(user => user?.email)
+        .catch(error => {
+            console.error('Error fetching user email:', error);
+            return null;
+        });
+
+}
 
 export const deleteUserById = async (userId: number) => {
 

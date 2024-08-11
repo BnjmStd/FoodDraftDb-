@@ -1,51 +1,59 @@
+'use client'
+
 import {
     useEffect,
     useRef,
     useState
 } from "react"
 
-import { useRouter } from "next/navigation"
+import { 
+    useRouter, 
+    usePathname 
+} from "next/navigation"
 
 export default function Nav({
     seccion
-} : {
+}: {
     seccion: string[]
 }) {
-
     const router = useRouter()
 
-    const [activeIndex, setActiveIndex] = useState<number | null>(0)
+    const pathName = usePathname()
+
+    const path = pathName.split("/")
+
+    const currentPath = seccion.findIndex((x) => x.toLowerCase() === path[1])
+
+    const [activeIndex, setActiveIndex] = useState<number | null>(currentPath ? currentPath : 0)
 
     const handleSetActive = (index: number) => {
         setActiveIndex(index)
-        const path = seccion[index].toLowerCase() === "home" 
-            ? "/" 
+        const path = seccion[index].toLowerCase() === "home"
+            ? "/"
             : `/${seccion[index].toLowerCase()}`
         router.push(path)
     }
 
     return (
-        <>
-            <nav className="items-center justify-center hidden md:flex">
-                <ul
-                    className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
+        <nav className="items-center justify-center hidden md:flex">
+            <ul
+                className={`flex [&>li>a]:text-current [&>li>a]:transition-colors 
                     [&>li>a]:duration-500 [&>li>a]:inline-block 
                     [&>li>a]:px-4 [&>li>a]:py-2 cursor-pointer`}
-                >
-                    {seccion.map((item, index) => (
-                        <li key={index}>
-                            <a
-                                onClick={() => handleSetActive(index)}
-                                className={activeIndex === index ? "underline-custom" : ""}
-                            >
-                                {item}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-                <MenuBackdrop />
-            </nav>
-        </>
+            >
+                {seccion.map((item, index) => (
+                    <li key={index}>
+                        <a
+                            onClick={() => handleSetActive(index)}
+                            className={activeIndex === index ? "underline-custom" : ""}
+                        >
+                            {item}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+            <MenuBackdrop />
+        </nav>
     )
 }
 

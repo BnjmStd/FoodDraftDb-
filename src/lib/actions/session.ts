@@ -33,7 +33,7 @@ export async function decrypt(session: string) {
             algorithms: ['HS256']
         })
 
-        return payload
+        return payload as { userId: number | string }
 
     } catch (error) {
         return null
@@ -51,11 +51,13 @@ export async function createSession(userId: string | null | number) {
 
     return "/admin"
 }
-
-export async function verifySession() {
+type Session = {
+    userId: String | number;
+};
+export async function verifySession(): Promise<Session | undefined> {
     const cookiep = cookies().get(cookie.name)?.value
 
-    if (!cookiep) return 
+    if (!cookiep) return
 
     const session = await decrypt(cookiep)
 
@@ -64,6 +66,16 @@ export async function verifySession() {
     }
 
     return { userId: session.userId }
+}
+
+export async function verifySessionClient() {
+    const cookiep = cookies().get(cookie.name)?.value
+
+    if (!cookiep) return
+
+    const session = await decrypt(cookiep)
+
+    return session
 }
 
 export async function deleteSession() {

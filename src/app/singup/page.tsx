@@ -1,10 +1,16 @@
 'use client'
 
-import Link from 'next/link'
 import { createNew } from '@/lib/actions/user'
-import { useActionState, useState } from 'react'
+
+/* icons  */
 import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { MdFastfood } from 'react-icons/md'
+
+import { 
+    useActionState, 
+    useState 
+} from 'react'
+import Link from 'next/link'
 
 export default function SignUp() {
 
