@@ -11,7 +11,7 @@ export default function Table ({
     onEdit,
 }:{
     columns: string[];
-    data: any[];
+    data: any[] | {} | undefined;
     onEdit: (rowIndex: number) => void;
 }) {
     return (
@@ -29,7 +29,7 @@ export default function Table ({
                 </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((row, rowIndex) => (
+                {data?.map((row, rowIndex) => (
                     <tr key={rowIndex}>
                         {columns.map((column, colIndex) => (
                             <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

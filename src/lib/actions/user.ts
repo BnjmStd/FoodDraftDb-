@@ -16,7 +16,6 @@ import {
 import {
     redirect
 } from "next/navigation"
-import { cookies } from "next/headers";
 
 export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
@@ -134,21 +133,28 @@ export const login = async (prev, formData: FormData) => {
     redirect(`${route}`)
 }
 
-export const getAllUser = cache(
 
+export const getAllUser = cache(
     async () => {
 
-        const isUser = await verifySession()
+        const isUser = await verifySession();
 
-        return prisma.user.findMany()
-            .then(users => users)
-            .catch(error => {
-                console.error('Error fetching users:', error);
-                return [];
-            });
+        if (!isUser) {
+            return { error: true, message: 'No user session found' };
+        }
+
+        try {
+            const users = await prisma.user.findMany();
+            if (users.length > 0) {
+                return { ok: true, data: users };
+            } else {
+                return { error: true, message: 'No users found' };
+            }
+        } catch (error) {
+            return { error: true, message: 'Error fetching users' };
+        }
     }
-
-)
+);
 
 export const msgWelcome = async () => {
 
