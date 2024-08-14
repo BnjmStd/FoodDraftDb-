@@ -127,12 +127,10 @@ export const login = async (prev, formData: FormData) => {
     }
 
     // create session
-
     const route = await createSession(user!.id)
 
     redirect(`${route}`)
 }
-
 
 export const getAllUser = cache(
     async () => {
