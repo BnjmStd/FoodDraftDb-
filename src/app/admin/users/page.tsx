@@ -27,34 +27,49 @@ import React, {
     Suspense,
     useEffect
 } from 'react'
-
-import { ErrorContext } from "@/lib/context/error"
-import { BsSearchHeart } from "react-icons/bs"
-import { FaEdit, FaTrashAlt } from "react-icons/fa"
-import { RiH1 } from "react-icons/ri"
-import { getUser } from "./Users"
-
-export function Users() {
-    
-    const users = use(getUser());
-
-    if ('error' in users && users.error) {
-        return <h1>Error</h1>;
-    }
-
-    return (
-        <ul>
-            {Array.isArray(users) && users.map(user => (
-                <li key={user.id}>{user.name}</li>
-            ))}
-        </ul>
-    );
-}
+import { Pagination } from "./Pagination"
+import UsersList from "./UsersList"
 
 export default function Page() {
+
+    const [coinsData, setCoinsData] = useState<User[]>([]) // use state para almacenar los datos
+    const [currentPage, setCurrentPage] = useState(1) // pagina actual
+    const [postsPerPage, setPostsPerPage] = useState(5) // cuantos datos por pagina
+
+    useEffect(() => {
+        // Definir la función asíncrona dentro del useEffect
+        const fetchData = async () => {
+            try {
+                const response = await getAllUser()
+
+                if (response.error) return
+
+                if (response.ok) {
+                    setCoinsData(response.data);
+                }
+
+
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const lastPostIndex = currentPage * postsPerPage // se multiplica la pagina actual por los post por pagina
+    const firstPostIndex = lastPostIndex - postsPerPage // 
+    const currentPosts = coinsData.slice(firstPostIndex, lastPostIndex)
+
     return (
-        <Suspense fallback={<h1>Loading...</h1>}>
-            <Users />
-        </Suspense>
-    );
+        <div>
+            <h1 className="text-2xl">Usuarios</h1>
+            <UsersList coinsData={currentPosts} />
+            <Pagination
+                totalPosts={coinsData.length}
+                postsPerPage={postsPerPage}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+            />
+        </div>
+    )
 }
