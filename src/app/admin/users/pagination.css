@@ -2,7 +2,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     margin-top: 1rem;
+    gap: 3px;
 }
 
 .pagination button {
@@ -11,13 +13,26 @@
     font-family: inherit;
     font-weight: 600;
     font-size: 16px;
-    margin: 0 5px;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     background: transparent;
     color: #fff;
     border-color: #eee;
+}
+
+.pagination .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+    }
 }
 
 .pagination button.active {
