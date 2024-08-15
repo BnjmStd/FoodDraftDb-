@@ -6,7 +6,6 @@ import { IoIosAddCircle } from "react-icons/io"
 
 /* components */
 import Spinner from "@/ui/components/loading/Spinner"
-import Table from "@/ui/components/table/Table"
 import Dialog from "@/ui/components/dialog/Dialog"
 import SearchAdmin from "@/ui/components/search/searchAdmin"
 
@@ -23,21 +22,19 @@ import { getAllUser } from "@/lib/actions/user"
 /* react */
 import React, {
     useState,
-    use,
-    Suspense,
     useEffect
 } from 'react'
+
 import { Pagination } from "./Pagination"
 import UsersList from "./UsersList"
 
 export default function Page() {
 
-    const [coinsData, setCoinsData] = useState<User[]>([]) // use state para almacenar los datos
-    const [currentPage, setCurrentPage] = useState(1) // pagina actual
-    const [postsPerPage, setPostsPerPage] = useState(5) // cuantos datos por pagina
+    const [coinsData, setCoinsData] = useState<User[]>([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsPerPage] = useState(5)
 
     useEffect(() => {
-        // Definir la función asíncrona dentro del useEffect
         const fetchData = async () => {
             try {
                 const response = await getAllUser()
@@ -60,16 +57,61 @@ export default function Page() {
     const firstPostIndex = lastPostIndex - postsPerPage // 
     const currentPosts = coinsData.slice(firstPostIndex, lastPostIndex)
 
+    const column = ["id", "email", "Actions"]
+
     return (
-        <div>
-            <h1 className="text-2xl">Usuarios</h1>
-            <UsersList coinsData={currentPosts} />
-            <Pagination
-                totalPosts={coinsData.length}
-                postsPerPage={postsPerPage}
-                setCurrentPage={setCurrentPage}
-                currentPage={currentPage}
-            />
+        <div className="w-full">
+            <main className="flex gap-2 justify-between p-1">
+                <SearchAdmin />
+                <div className="flex items-center">
+                    <button
+                        className="p-2 hover:bg-gray-200 rounded-md"
+                        onClick={() => {}}
+                    >
+                        <IoReload />
+                    </button>
+                    <button
+                        className="p-2 hover:bg-gray-200 rounded-md"
+                        onClick={() => {}}
+                    >
+                        <IoIosAddCircle />
+                    </button>
+                </div>
+            </main>
+            <div className="overflow-x-scroll pt-1 ">
+                <table className="w-full border-collapse bg-neutral-400 p-1 ">
+
+                    <caption className="text-black text-xl text-center 
+                        font-bold uppercase p-2">
+                        Usuarios
+                    </caption>
+
+                    <thead className="capitalize bg-neutral-800 text-neutral-300 ">
+                        <tr className="">
+                            {column.map((x) => {
+                                return (
+                                    <th className="px-6 py-4 ">{x}</th>
+                                )
+                            })}
+                        </tr>
+                    </thead>
+
+                    <UsersList data={currentPosts} />
+                    <tfoot>
+                        <tr>
+                            <td colSpan={column.length}>
+                                <Pagination
+                                    totalPosts={coinsData.length}
+                                    postsPerPage={postsPerPage}
+                                    setCurrentPage={setCurrentPage}
+                                    currentPage={currentPage}
+                                />
+                            </td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
         </div>
     )
 }

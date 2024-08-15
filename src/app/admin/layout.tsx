@@ -8,7 +8,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="flex m-20 flex-grow border overflow-auto items-center justify-center">
+        <div className="m-20 ">
             <Sidebar />
             <Suspense fallback={<Spinner />}>
                 {children}
