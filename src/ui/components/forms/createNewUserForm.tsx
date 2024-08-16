@@ -1,19 +1,31 @@
 'use client'
 
 import { createNewAdmin } from "@/lib/actions/user";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import {
     FaEye,
     FaEyeSlash
 } from "react-icons/fa6";
 
 export const UserForm = () => {
+
     const userTypes = ["Admin", "User"];
     const countrys = ['Chile', 'Argentina', 'Brazil', 'Colombia', 'Mexico', 'Peru', 'Venezuela']
+
     const [isShowPassword, setIsShowPassword] = useState(false)
 
+    const [
+        state,
+        action,
+        isPending
+    ] = useActionState(createNewAdmin, null)
+
+    if (state?.success) {
+        console.log('algo')
+    }
+
     return (
-        <form action={createNewAdmin} className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
+        <form action={action} className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
             <div className="mb-4">
                 <label
                     htmlFor="name"
@@ -29,6 +41,8 @@ export const UserForm = () => {
                     className="w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring focus:ring-indigo-200"
                 />
+                {state?.errors?.name &&
+                    <p className='error'>{state.errors.name}</p>}
             </div>
             <div className="mb-4">
                 <label
@@ -48,6 +62,8 @@ export const UserForm = () => {
                         </option>
                     ))}
                 </select>
+                {state?.errors?.country &&
+                    <p className='error'>{state.errors.country}</p>}
             </div>
             <div className="mb-4">
                 <label
@@ -64,6 +80,8 @@ export const UserForm = () => {
                     className="w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring focus:ring-indigo-200"
                 />
+                {state?.errors?.email &&
+                    <p className='error'>{state.errors.email}</p>}
             </div>
             <div className="mb-4">
                 <label
@@ -93,6 +111,8 @@ export const UserForm = () => {
                         }
                     </span>
                 </div>
+                {state?.errors?.password &&
+                    <p className='error'>{state.errors.password}</p>}
             </div>
             <div className="mb-4">
                 <label htmlFor="type" className="block text-gray-200 font-bold mb-2">Type</label>
@@ -108,6 +128,8 @@ export const UserForm = () => {
                         </option>
                     ))}
                 </select>
+                {state?.errors?.type &&
+                    <p className='error'>{state.errors.type}</p>}
             </div>
             <div className="flex justify-center ">
                 <button type="submit" className="w-full overflow-hidden px-4 py-2 bg-blue-500 text-white 

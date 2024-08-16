@@ -17,8 +17,7 @@ import {
     redirect
 } from "next/navigation"
 
-export const createNewAdmin = async (formData: FormData) => {
-    console.log(formData)
+export const createNewAdmin = async (prev, formData: FormData) => {
 
     const errors: {
         [key: string]: string
@@ -35,21 +34,34 @@ export const createNewAdmin = async (formData: FormData) => {
     // password
 
     const pwd = formData.get('password') as string | null
-    const pwdConfirm = formData.get('confirmPassword') as string | null
 
     if (!pwd || pwd.length < 8) {
         errors.password = 'Password must be at least 8 characters long'
     }
 
-    if (pwd !== pwdConfirm) {
-        errors.confirmPassword = 'Passwords do not match'
-    }
-
     // country 
+
+    const country = formData.get('country') as string
+
+    if (!country || country.length < 1) {
+        errors.country = 'country must be selected'
+    }
 
     // type
 
+    const type = formData.get('type') as string
+
+    if (!type ) {
+        errors.type = 'type selected pls'
+    }
+
     // name
+
+    const name = formData.get('name') as string
+
+    if (!name || name.length < 3) {
+        errors.name = 'name must be at least 3 characters long'
+    }
 
     if (Object.keys(errors).length > 0) {
 
@@ -64,11 +76,11 @@ export const createNewAdmin = async (formData: FormData) => {
 
     const newUser = await prisma.user.create({
         data: {
-            name: '',
-            country: '',
+            name: name,
+            country: country,
             email: email,
             password: hashedPwd,
-            type: ''
+            type: type
         }
     })
 

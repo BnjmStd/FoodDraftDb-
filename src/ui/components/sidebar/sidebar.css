@@ -21,4 +21,5 @@
     border-width: 5px;
     border-style: solid;
     border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+    z-index: 100;
 }
