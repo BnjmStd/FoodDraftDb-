@@ -1,6 +1,6 @@
-import { useRef } from 'react';
 import "./dialog.css"
 import { IoMdClose } from 'react-icons/io';
+import { useRef } from 'react';
 
 export default function Dialog({
     title = '#',
@@ -13,9 +13,7 @@ export default function Dialog({
     isOpen: boolean
     isSetOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-
     const dialogRef = useRef<HTMLDialogElement | null>(null)
-
     if (isOpen && dialogRef.current) dialogRef.current.showModal()
 
     const closeDialog = () => {
@@ -24,9 +22,9 @@ export default function Dialog({
     }
 
     return (
-        <dialog ref={dialogRef} className="dialog rounded-md p-5">
+        <dialog ref={dialogRef} className="dialog rounded-md p-5 bg-neutral-500">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-center">{title}</h2>
+                <h2 className="text-xl font-bold text-center text-white">{title}</h2>
                 <button 
                     onClick={closeDialog} 
                     className="p-2 bg-red-500 

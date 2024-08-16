@@ -13,7 +13,7 @@
     justify-content: center;
 
     &:hover {
-        background-color: rgba(255, 0, 0, 0.648);
+        background-color: rgba(255, 0, 0, 0.848);
     }
 }
 
@@ -23,6 +23,7 @@
     opacity: 0;
     transition: display .6s, overlay .6s, opacity .6s;
     transition-behavior: allow-discrete;
+    scrollbar-color: black gray ;
 
     &[open] {
         opacity: 1;

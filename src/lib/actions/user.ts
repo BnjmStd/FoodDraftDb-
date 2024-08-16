@@ -19,6 +19,64 @@ import {
 
 export const createNewAdmin = async (formData: FormData) => {
     console.log(formData)
+
+    const errors: {
+        [key: string]: string
+    } = {}
+
+    // email
+
+    const email = formData.get('email') as string
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = 'Invalid email format or missing email'
+    }
+
+    // password
+
+    const pwd = formData.get('password') as string | null
+    const pwdConfirm = formData.get('confirmPassword') as string | null
+
+    if (!pwd || pwd.length < 8) {
+        errors.password = 'Password must be at least 8 characters long'
+    }
+
+    if (pwd !== pwdConfirm) {
+        errors.confirmPassword = 'Passwords do not match'
+    }
+
+    // country 
+
+    // type
+
+    // name
+
+    if (Object.keys(errors).length > 0) {
+
+        return {
+            success: false,
+            errors
+        }
+    }
+
+    const salt = await bcrypt.genSalt(5);
+    const hashedPwd = await bcrypt.hash(pwd, salt)
+
+    const newUser = await prisma.user.create({
+        data: {
+            name: '',
+            country: '',
+            email: email,
+            password: hashedPwd,
+            type: ''
+        }
+    })
+
+    return {
+        success: true,
+        message: 'Usuario agregado' + newUser.name
+    }
+
 }
 
 export const createNew = async (prev, formData: FormData) => {
@@ -175,9 +233,7 @@ export const msgWelcome = async () => {
 }
 
 export const deleteUserById = async (userId: number) => {
-
     try {
-        console.log('hola')
         const deletedUser = await prisma.user.delete({
             where: {
                 id: userId
@@ -185,11 +241,10 @@ export const deleteUserById = async (userId: number) => {
         });
 
         console.log('Usuario eliminado:', deletedUser);
+        return { ok: true, data: deletedUser };
 
     } catch (error) {
-
         console.error('Error al eliminar el usuario:', error);
-
+        return { error: true, message: 'Error al eliminar el usuario' };
     }
-
 }

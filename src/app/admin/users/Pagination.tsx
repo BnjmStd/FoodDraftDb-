@@ -1,5 +1,8 @@
 import "./pagination.css"
-import { FaRegArrowAltCircleRight, FaRegArrowAltCircleLeft } from "react-icons/fa";
+import { 
+    FaRegArrowAltCircleRight, 
+    FaRegArrowAltCircleLeft 
+} from "react-icons/fa";
 
 export const Pagination = ({
     totalPosts,
