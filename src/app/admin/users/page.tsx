@@ -19,13 +19,12 @@ import {
     User
 } from "@prisma/client"
 
-import { deleteUserById, getAllUser } from "@/lib/actions/user"
+import { deleteUserById, editUser, getAllUser, searchById } from "@/lib/actions/user"
 
 /* react */
 import React, {
     useState,
     useEffect,
-    useOptimistic,
     use,
 } from 'react'
 
@@ -38,9 +37,10 @@ export default function Page() {
     const [coinsData, setCoinsData] = useState<User[]>([])
     const [loading, setIsLoading] = useState<boolean>(true)
     const [filtering, setFiltering] = useState<string>()
+    const [selected, setIsSelected] = useState<User | undefined>()
 
-    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
+    const { setIsSetOpen } = use(ErrorContext)
+    
     const filteredData = filtering
         ? coinsData.filter(user =>
             user.email.toLowerCase().includes(filtering.toLowerCase()) ||
@@ -50,8 +50,6 @@ export default function Page() {
         : coinsData;
 
     const column = ["id", "email", "type", "Actions"]
-
-    const openDialog = () => setIsDialogOpen(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,11 +73,9 @@ export default function Page() {
     return (
         <>
             <Dialog 
-                isOpen={isDialogOpen} 
-                isSetOpen={setIsDialogOpen} 
                 title="Create New Users" 
             >
-                <UserForm />
+                <UserForm User={selected} />
             </Dialog>
 
             <div className="w-full border-2 rounded-md">
@@ -94,7 +90,7 @@ export default function Page() {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={openDialog}
+                            onClick={() => {setIsSetOpen(true)}}
                         >
                             <IoIosAddCircle />
                         </button>
@@ -108,6 +104,7 @@ export default function Page() {
                             coinsData={filteredData}
                             loading={loading}
                             setCoinsData={setCoinsData}
+                            setIsSelected={setIsSelected}
                         />
                     )}
                 </div>
@@ -120,18 +117,20 @@ export function Table({
     coinsData,
     loading,
     column,
-    setCoinsData
+    setCoinsData,
+    setIsSelected
 }: {
-    coinsData: User[] | Food[] | Category[]
+    coinsData: User[] 
     loading: boolean
     column: string[]
     setCoinsData: React.Dispatch<React.SetStateAction<User[]>>
+    setIsSelected: React.Dispatch<React.SetStateAction<User | undefined>>
 }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage] = useState(5)
 
     const lastPostIndex = currentPage * postsPerPage // se multiplica la pagina actual por los post por pagina
-    const firstPostIndex = lastPostIndex - postsPerPage // 
+    const firstPostIndex = lastPostIndex - postsPerPage
     const currentPosts = coinsData.slice(firstPostIndex, lastPostIndex)
 
     return (
@@ -151,7 +150,7 @@ export function Table({
                     </tr>
                 </tbody>
             ) : (
-                <Tbody column={column} data={currentPosts} setCoinsData={setCoinsData}/>
+                <TbodyUser data={currentPosts} setCoinsData={setCoinsData} setIsSelected={setIsSelected}/>
             )}
 
             <Tfoot
@@ -182,14 +181,14 @@ export function Thead({
     )
 }
 
-export function Tbody({
-    column,
+export function TbodyUser({
     data,
-    setCoinsData
+    setCoinsData,
+    setIsSelected
 }: {
-    column: string[]
-    data: User[] | Food[] | Category[]
+    data: User[] 
     setCoinsData: React.Dispatch<React.SetStateAction<User[]>>
+    setIsSelected: React.Dispatch<React.SetStateAction<User | undefined>>
 }) {
     return (
         <tbody>
@@ -198,7 +197,7 @@ export function Tbody({
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{`# ${date.id}`}</td>
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{date.email}</td>
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{date.type}</td>
-                    <Actions id={date.id} setCoinsData={setCoinsData}/>
+                    <Actions id={date.id} setCoinsData={setCoinsData} setIsSelected={setIsSelected}/>
                 </tr>
             ))}
         </tbody>
@@ -207,13 +206,15 @@ export function Tbody({
 
 export function Actions({
     id,
-    setCoinsData
+    setCoinsData,
+    setIsSelected
 }: {
     id: number
     setCoinsData: React.Dispatch<React.SetStateAction<User[]>>
+    setIsSelected: React.Dispatch<React.SetStateAction<User | undefined>>
 }) {
 
-    const { setError } = use(ErrorContext)
+    const { setError, setIsSetOpen } = use(ErrorContext)
 
     const handleDelete = async (id : number) => {
         try {
@@ -239,10 +240,26 @@ export function Actions({
         }
     }
 
+    const handleEdit = async (id : number) => {
+        const user = await searchById(id)
+
+        if (user.error) {
+            setError({
+                message: user.message,
+                type: 'error'
+            })
+        }
+
+        if (user.ok) {
+            setIsSelected(user.data)
+            setIsSetOpen(true)
+        }
+    }
+
     return (
         <td className="px-6 py-4  text-center whitespace-nowrap text-sm flex items-center justify-center">
             <button
-                onClick={() => { }}
+                onClick={() => handleEdit(id)}
                 className="text-blue-600 hover:text-blue-900 mr-2 p-2 hover:bg-neutral-400 rounded-md"
             >
                 <FaEdit className="text-blue-600"/>

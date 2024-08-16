@@ -1,31 +1,56 @@
 'use client'
 
 import { createNewAdmin } from "@/lib/actions/user";
-import { useActionState, useState } from "react";
+import { ErrorContext } from "@/lib/context/error";
+
+import { 
+    useActionState, 
+    useState, 
+    useRef, 
+    use,
+    useEffect
+} from "react";
+
 import {
     FaEye,
     FaEyeSlash
 } from "react-icons/fa6";
 
-export const UserForm = () => {
+import {
+    User
+} from "@prisma/client"
+
+export const UserForm = ({
+    User
+}:{
+    User?: User
+}) => {
 
     const userTypes = ["Admin", "User"];
     const countrys = ['Chile', 'Argentina', 'Brazil', 'Colombia', 'Mexico', 'Peru', 'Venezuela']
+    const formRef = useRef<HTMLFormElement | null>(null)
 
     const [isShowPassword, setIsShowPassword] = useState(false)
-
+    const { setIsSetOpen, isSetOpen } = use(ErrorContext)
+    
     const [
         state,
         action,
         isPending
     ] = useActionState(createNewAdmin, null)
 
-    if (state?.success) {
-        console.log('algo')
-    }
+    useEffect(() => {
+        if (state?.success) {
+            formRef.current?.reset();
+            setIsSetOpen(false);
+        }
+        if (!isSetOpen) {
+            formRef.current?.reset()
+        }
+    }, [state?.success, setIsSetOpen]);
 
     return (
-        <form action={action} className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
+        <form ref={formRef} action={action} className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
             <div className="mb-4">
                 <label
                     htmlFor="name"
@@ -40,6 +65,7 @@ export const UserForm = () => {
                     name="name"
                     className="w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring focus:ring-indigo-200"
+                    defaultValue={User?.email || ""}
                 />
                 {state?.errors?.name &&
                     <p className='error'>{state.errors.name}</p>}

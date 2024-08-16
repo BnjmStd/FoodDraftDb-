@@ -51,7 +51,7 @@ export const createNewAdmin = async (prev, formData: FormData) => {
 
     const type = formData.get('type') as string
 
-    if (!type ) {
+    if (!type) {
         errors.type = 'type selected pls'
     }
 
@@ -230,10 +230,10 @@ export const msgWelcome = async () => {
 
     return prisma.user.findUnique({
         where: {
-            id: res?.userId as number, 
+            id: res?.userId as number,
         },
         select: {
-            email: true, 
+            email: true,
         },
     })
         .then(user => user?.email)
@@ -246,17 +246,59 @@ export const msgWelcome = async () => {
 
 export const deleteUserById = async (userId: number) => {
     try {
+
+        const userCurrentId = await verifySession()
+
+        if (!userCurrentId) return { error: true, message: 'Error al comprobar id' }
+
+        if (userId == userCurrentId.userId) {
+            return { error: true, message: 'No te puedes eliminar a ti mismo!' };
+        }
+
         const deletedUser = await prisma.user.delete({
             where: {
                 id: userId
             }
         });
 
-        console.log('Usuario eliminado:', deletedUser);
         return { ok: true, data: deletedUser };
 
     } catch (error) {
-        console.error('Error al eliminar el usuario:', error);
         return { error: true, message: 'Error al eliminar el usuario' };
     }
+}
+
+export const searchById = async (userId: number) => {
+    try {
+        if (typeof userId !== 'number' || isNaN(userId)) {
+
+            return { error: true, message: 'ID de usuario no válido.' }
+        }
+
+        const userCurrentId = await verifySession()
+
+        if (!userCurrentId) {
+
+            return { error: true, message: 'Error al comprobar ID de sesión.' }
+        }
+        
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        })
+
+        if (!user) {
+            
+            return { error: true, message: `Usuario con ID ${userId} no encontrado.` };
+        }
+
+        return { ok: true, data: user };
+
+    } catch (error) {
+
+        return { error: true, message: 'Error inesperado al buscar el usuario.' };
+    }
+}
+
+export const editUser = async () => {
+    console.log('hola')
 }

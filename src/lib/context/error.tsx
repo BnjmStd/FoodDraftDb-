@@ -16,6 +16,8 @@ interface ErrorContextType {
     errors: Error[];
     setError: (error: Error) => void;
     clearError: (id: string) => void;
+    isSetOpen: boolean;
+    setIsSetOpen: (isOpen: boolean) => void;
 }
 
 function generateUniqueId() {
@@ -24,8 +26,10 @@ function generateUniqueId() {
 
 export const ErrorContext = createContext<ErrorContextType>({
     errors: [],
-    setError: () => {},
-    clearError: () => {}
+    setError: () => { },
+    clearError: () => { },
+    isSetOpen: false,
+    setIsSetOpen: () => { }
 });
 
 export function ErrorContextProvider({
@@ -34,6 +38,7 @@ export function ErrorContextProvider({
     children: React.ReactNode;
 }) {
     const [errors, setErrors] = useState<Error[]>([]);
+    const [isSetOpen, setIsSetOpen] = useState<boolean>(false);
 
     const setError = useCallback((error: Error) => {
         const newError = {
@@ -48,7 +53,13 @@ export function ErrorContextProvider({
     }, []);
 
     return (
-        <ErrorContext.Provider value={{ errors, setError, clearError }}>
+        <ErrorContext.Provider value={{
+            errors, 
+            setError, 
+            clearError, 
+            isSetOpen,
+            setIsSetOpen
+        }}>
             {children}
         </ErrorContext.Provider>
     );

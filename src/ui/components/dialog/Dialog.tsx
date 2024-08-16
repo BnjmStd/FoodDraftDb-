@@ -1,25 +1,30 @@
 import "./dialog.css"
 import { IoMdClose } from 'react-icons/io';
-import { useRef } from 'react';
+import { use, useEffect, useRef } from 'react';
+import { ErrorContext } from "@/lib/context/error";
 
 export default function Dialog({
     title = '#',
     children,
-    isOpen,
-    isSetOpen
 }: {
     title: string
     children: React.ReactNode
-    isOpen: boolean
-    isSetOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
     const dialogRef = useRef<HTMLDialogElement | null>(null)
-    if (isOpen && dialogRef.current) dialogRef.current.showModal()
+    
+    const { isSetOpen, setIsSetOpen } = use(ErrorContext)
+
+    useEffect(() => {
+        if (isSetOpen && dialogRef.current) {
+            dialogRef.current.showModal();
+        } else if (dialogRef.current) {
+            dialogRef.current.close();
+        }
+    }, [isSetOpen]);
 
     const closeDialog = () => {
-        dialogRef.current?.close()
-        isSetOpen(false)
-    }
+        setIsSetOpen(false);
+    };
 
     return (
         <dialog ref={dialogRef} className="dialog rounded-md p-5 bg-neutral-500">
