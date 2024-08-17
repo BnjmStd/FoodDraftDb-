@@ -1,12 +1,16 @@
 'use client'
 
-import { createNewAdmin } from "@/lib/actions/user";
-import { ErrorContext } from "@/lib/context/error";
-
 import { 
-    useActionState, 
-    useState, 
-    useRef, 
+    createNewAdmin, 
+    editUser 
+} from "@/lib/actions/user";
+import { ErrorContext } from "@/lib/context/error";
+import { AdminContext } from "@/lib/context/admin";
+
+import {
+    useActionState,
+    useState,
+    useRef,
     use,
     useEffect
 } from "react";
@@ -16,15 +20,13 @@ import {
     FaEyeSlash
 } from "react-icons/fa6";
 
-import {
-    User
-} from "@prisma/client"
+export const UserForm = () => {
 
-export const UserForm = ({
-    User
-}:{
-    User?: User
-}) => {
+    const {
+        selected,
+    } = use(AdminContext)
+
+    const User = selected
 
     const userTypes = ["Admin", "User"];
     const countrys = ['Chile', 'Argentina', 'Brazil', 'Colombia', 'Mexico', 'Peru', 'Venezuela']
@@ -32,12 +34,12 @@ export const UserForm = ({
 
     const [isShowPassword, setIsShowPassword] = useState(false)
     const { setIsSetOpen, isSetOpen } = use(ErrorContext)
-    
+
     const [
         state,
         action,
         isPending
-    ] = useActionState(createNewAdmin, null)
+    ] = useActionState(selected ? editUser : createNewAdmin, null);
 
     useEffect(() => {
         if (state?.success) {
@@ -51,6 +53,14 @@ export const UserForm = ({
 
     return (
         <form ref={formRef} action={action} className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
+            {
+                User && <div className="hidden">
+                    <input type="text"
+                        name="id"
+                        defaultValue={User?.id} />
+                </div>
+            }
+
             <div className="mb-4">
                 <label
                     htmlFor="name"
@@ -65,7 +75,7 @@ export const UserForm = ({
                     name="name"
                     className="w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring focus:ring-indigo-200"
-                    defaultValue={User?.email || ""}
+                    defaultValue={User?.name || ""}
                 />
                 {state?.errors?.name &&
                     <p className='error'>{state.errors.name}</p>}
@@ -83,7 +93,7 @@ export const UserForm = ({
                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring"
                 >
                     {countrys.map(country => (
-                        <option key={country} value={country}>
+                        <option key={country} value={country} defaultValue={User?.country || ""}>
                             {country}
                         </option>
                     ))}
@@ -105,6 +115,7 @@ export const UserForm = ({
                     placeholder="jamon@cerrano.cl"
                     className="w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring focus:ring-indigo-200"
+                    defaultValue={User?.email || ""}
                 />
                 {state?.errors?.email &&
                     <p className='error'>{state.errors.email}</p>}
@@ -121,7 +132,7 @@ export const UserForm = ({
                         type={isShowPassword ? 'password' : 'text'}
                         name="password"
                         id="password"
-                        placeholder={isShowPassword ? '••••••••' : 'contraseña'}
+                        placeholder={isShowPassword ? '••••••••' : 'contraseña actual'}
                         className="input-sing-up"
                         required
                     />
@@ -140,6 +151,39 @@ export const UserForm = ({
                 {state?.errors?.password &&
                     <p className='error'>{state.errors.password}</p>}
             </div>
+            {
+                User &&             <div className="mb-4">
+                <label
+                    htmlFor="password"
+                    className="block text-gray-200 font-bold mb-2"
+                >
+                    New Password
+                </label>
+                <div className='relative'>
+                    <input
+                        type={isShowPassword ? 'password' : 'text'}
+                        name="newpassword"
+                        id="password"
+                        placeholder={isShowPassword ? '••••••••' : 'contraseña actual'}
+                        className="input-sing-up"
+                        required
+                    />
+                    <span
+                        className="text-primary h-2 cursor-pointer absolute 
+                                        bottom-[50%] right-[5%]"
+                        onClick={() => setIsShowPassword(!isShowPassword)}
+                    >
+                        {
+                            isShowPassword
+                                ? <FaEye />
+                                : <FaEyeSlash />
+                        }
+                    </span>
+                </div>
+                {state?.errors?.passwordNew &&
+                    <p className='error'>{state.errors.passwordNew}</p>}
+            </div>
+            }
             <div className="mb-4">
                 <label htmlFor="type" className="block text-gray-200 font-bold mb-2">Type</label>
                 <select
@@ -149,7 +193,7 @@ export const UserForm = ({
                     focus:ring focus:ring-indigo-200"
                 >
                     {userTypes.map((type) => (
-                        <option className="capitalize" key={type} value={type}>
+                        <option className="capitalize" key={type} value={type} defaultValue={User?.type || ""}>
                             {type}
                         </option>
                     ))}

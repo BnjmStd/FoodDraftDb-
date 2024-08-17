@@ -1,7 +1,15 @@
 import "./dialog.css"
+
 import { IoMdClose } from 'react-icons/io';
-import { use, useEffect, useRef } from 'react';
+
+import { 
+    use, 
+    useEffect, 
+    useRef 
+} from 'react';
+
 import { ErrorContext } from "@/lib/context/error";
+import { AdminContext } from "@/lib/context/admin";
 
 export default function Dialog({
     title = '#',
@@ -13,6 +21,7 @@ export default function Dialog({
     const dialogRef = useRef<HTMLDialogElement | null>(null)
     
     const { isSetOpen, setIsSetOpen } = use(ErrorContext)
+    const { setIsSelected } = use(AdminContext)
 
     useEffect(() => {
         if (isSetOpen && dialogRef.current) {
@@ -24,6 +33,7 @@ export default function Dialog({
 
     const closeDialog = () => {
         setIsSetOpen(false);
+        setIsSelected(undefined)
     };
 
     return (

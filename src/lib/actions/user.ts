@@ -16,6 +16,7 @@ import {
 import {
     redirect
 } from "next/navigation"
+import { User } from "@prisma/client";
 
 export const createNewAdmin = async (prev, formData: FormData) => {
 
@@ -281,13 +282,13 @@ export const searchById = async (userId: number) => {
 
             return { error: true, message: 'Error al comprobar ID de sesión.' }
         }
-        
+
         const user = await prisma.user.findUnique({
             where: { id: userId },
         })
 
         if (!user) {
-            
+
             return { error: true, message: `Usuario con ID ${userId} no encontrado.` };
         }
 
@@ -299,6 +300,124 @@ export const searchById = async (userId: number) => {
     }
 }
 
-export const editUser = async () => {
-    console.log('hola')
+export const editUser = async (prev, formData: FormData) => {
+
+    const errors: { [key: string]: string } = {};
+
+    // id
+    const formDataId = formData.get('id');
+
+    const id = formDataId !== null ? Number(formDataId) : 0;
+    
+    if (isNaN(id) || id === 0) {
+        errors.id = 'invalid id';
+    }
+
+    // email
+    const email = formData.get('email') as string;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = 'Invalid email format or missing email';
+    }
+
+    // password 
+    const pwd = formData.get('password') as string;
+    if (pwd && pwd.length < 8) {
+        errors.password = 'Password must be at least 8 characters long';
+    }
+
+    const newPwd = formData.get('newpassword') as string;
+    if (pwd && pwd.length < 8) {
+        errors.passwordNew = 'Password must be at least 8 characters long';
+    }
+
+    // country
+    const country = formData.get('country') as string;
+    if (!country || country.length < 1) {
+        errors.country = 'Country must be selected';
+    }
+
+    // type
+    const type = formData.get('type') as string;
+    if (!type) {
+        errors.type = 'Type must be selected';
+    }
+
+    // name
+    const name = formData.get('name') as string;
+    if (!name || name.length < 3) {
+        errors.name = 'Name must be at least 3 characters long';
+    }
+
+    // Check for errors
+    if (Object.keys(errors).length > 0) {
+        return {
+            success: false,
+            errors
+        };
+    }
+
+    /*const currentForm = {   
+        id: id,
+        name: name,
+        email: email,
+        password: pwd,
+        newPassword: newPwd,
+        country: country,
+        type: type
+    }*/
+
+    const existingUser = await prisma.user.findUnique({
+        where: { id },
+    });
+
+    if (!existingUser) {
+        return {
+            success: false,
+            errors: { general: 'User not found' },
+        };
+    }
+
+    // Validar la contraseña antigua
+    const isPasswordValid = await bcrypt.compare(pwd, existingUser.password);
+    if (!isPasswordValid) {
+        return {
+            success: false,
+            errors: { password: 'Old password is incorrect' },
+        };
+    }
+
+    const updatedData = {
+        name: name,
+        country: country,
+        email: email,
+        password: pwd,
+        type: type,
+        updatedAt: new Date(),
+    }
+
+    // Si se proporcionó una nueva contraseña, hash y actualizarla
+    if (newPwd) {
+        const salt = await bcrypt.genSalt(5);
+        const hashedNewPassword = await bcrypt.hash(newPwd, salt);
+        updatedData.password = hashedNewPassword
+    }
+
+    // Actualizar el usuario en la base de datos
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id },
+            data: updatedData,
+        });
+
+        return {
+            success: true,
+            message: 'Usuario actualizado: ' + updatedUser.name,
+        };
+
+    } catch (error) {
+        return {
+            success: false,
+            errors: { general: 'An error occurred while updating the user.' },
+        };
+    }
 }
