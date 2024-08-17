@@ -62,6 +62,8 @@ export default function Page() {
         )
         : userData;
 
+    console.log(filteredData)
+
     const column = ["id", "email", "type", "Actions"]
 
     const reloadData = async () => {
@@ -113,20 +115,19 @@ export default function Page() {
 
             <div className="w-full border-2 rounded-md space-y-2">
 
-                <Suspense fallback={<p>Cargando ...</p>}>
-                    <div className="grid sm:grid-cols-3 w-full gap-6 content-center grid-cols-1">
-                        <div className="bg-neutral-300 h-[150px] rounded-md flex flex-col gap-2 items-center justify-center shadow-md">
-                            <h1 className="text-center text-3xl font-semibold"></h1>
-                            <p className="text-center text-3xl font-semibold">Total User: {userData.length} </p>
-                        </div>
-                        <div className="bg-neutral-300 h-[150px] rounded-md flex items-center justify-center shadow-md">
-                            <p className="text-center text-3xl font-semibold">New Registrations: {newRegistrations.length} </p>
-                        </div>
-                        <div className="bg-neutral-300 h-[150px] rounded-md flex items-center justify-center shadow-md">
-                            <p className="text-center text-3xl font-semibold">Premium Users: 0</p>
-                        </div>
+
+                <div className="grid sm:grid-cols-3 w-full gap-6 content-center grid-cols-1">
+                    <div className="bg-neutral-300 h-[150px] rounded-md flex flex-col gap-2 items-center justify-center shadow-md">
+                        <h1 className="text-center text-3xl font-semibold"></h1>
+                        <p className="text-center text-3xl font-semibold">Total User: {userData.length} </p>
                     </div>
-                </Suspense>
+                    <div className="bg-neutral-300 h-[150px] rounded-md flex items-center justify-center shadow-md">
+                        <p className="text-center text-3xl font-semibold">New Registrations: {newRegistrations.length} </p>
+                    </div>
+                    <div className="bg-neutral-300 h-[150px] rounded-md flex items-center justify-center shadow-md">
+                        <p className="text-center text-3xl font-semibold">Premium Users: 0</p>
+                    </div>
+                </div>
 
                 <main className="flex gap-2 justify-between p-1">
                     <SearchAdmin setFiltering={setFiltering} />
@@ -228,11 +229,6 @@ export function TbodyUser({
 }: {
     data: User[]
 }) {
-
-    const {
-        setUserData,
-        setIsSelected
-    } = use(AdminContext)
 
     return (
         <tbody>

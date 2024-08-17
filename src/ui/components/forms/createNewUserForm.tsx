@@ -1,24 +1,24 @@
 'use client'
 
-import { 
-    createNewAdmin, 
-    editUser 
+import {
+    createNewAdmin,
+    editUser
 } from "@/lib/actions/user";
+
 import { ErrorContext } from "@/lib/context/error";
 import { AdminContext } from "@/lib/context/admin";
 
 import {
     useActionState,
-    useState,
     useRef,
     use,
     useEffect
 } from "react";
 
-import {
-    FaEye,
-    FaEyeSlash
-} from "react-icons/fa6";
+import InputPassword from "../input/password/InputPassword";
+
+const userTypes = ["Admin", "User"];
+const countrys = ['Chile', 'Argentina', 'Brazil', 'Colombia', 'Mexico', 'Peru', 'Venezuela']
 
 export const UserForm = () => {
 
@@ -27,12 +27,8 @@ export const UserForm = () => {
     } = use(AdminContext)
 
     const User = selected
-
-    const userTypes = ["Admin", "User"];
-    const countrys = ['Chile', 'Argentina', 'Brazil', 'Colombia', 'Mexico', 'Peru', 'Venezuela']
     const formRef = useRef<HTMLFormElement | null>(null)
 
-    const [isShowPassword, setIsShowPassword] = useState(false)
     const { setIsSetOpen, isSetOpen } = use(ErrorContext)
 
     const [
@@ -43,6 +39,7 @@ export const UserForm = () => {
 
     useEffect(() => {
         if (state?.success) {
+            console.log('entre al success')
             formRef.current?.reset();
             setIsSetOpen(false);
         }
@@ -60,7 +57,6 @@ export const UserForm = () => {
                         defaultValue={User?.id} />
                 </div>
             }
-
             <div className="mb-4">
                 <label
                     htmlFor="name"
@@ -121,68 +117,16 @@ export const UserForm = () => {
                     <p className='error'>{state.errors.email}</p>}
             </div>
             <div className="mb-4">
-                <label
-                    htmlFor="password"
-                    className="block text-gray-200 font-bold mb-2"
-                >
-                    Password
-                </label>
-                <div className='relative'>
-                    <input
-                        type={isShowPassword ? 'password' : 'text'}
-                        name="password"
-                        id="password"
-                        placeholder={isShowPassword ? '••••••••' : 'contraseña actual'}
-                        className="input-sing-up"
-                        required
-                    />
-                    <span
-                        className="text-primary h-2 cursor-pointer absolute 
-                                        bottom-[50%] right-[5%]"
-                        onClick={() => setIsShowPassword(!isShowPassword)}
-                    >
-                        {
-                            isShowPassword
-                                ? <FaEye />
-                                : <FaEyeSlash />
-                        }
-                    </span>
-                </div>
+                <InputPassword label={'Password'} name={'password'}/>
                 {state?.errors?.password &&
                     <p className='error'>{state.errors.password}</p>}
             </div>
             {
-                User &&             <div className="mb-4">
-                <label
-                    htmlFor="password"
-                    className="block text-gray-200 font-bold mb-2"
-                >
-                    New Password
-                </label>
-                <div className='relative'>
-                    <input
-                        type={isShowPassword ? 'password' : 'text'}
-                        name="newpassword"
-                        id="password"
-                        placeholder={isShowPassword ? '••••••••' : 'contraseña actual'}
-                        className="input-sing-up"
-                        required
-                    />
-                    <span
-                        className="text-primary h-2 cursor-pointer absolute 
-                                        bottom-[50%] right-[5%]"
-                        onClick={() => setIsShowPassword(!isShowPassword)}
-                    >
-                        {
-                            isShowPassword
-                                ? <FaEye />
-                                : <FaEyeSlash />
-                        }
-                    </span>
+                User && <div className="mb-4">
+                    <InputPassword label={'New Password'} name={"newpassword"} />
+                    {state?.errors?.passwordNew &&
+                        <p className='error'>{state.errors.passwordNew}</p>}
                 </div>
-                {state?.errors?.passwordNew &&
-                    <p className='error'>{state.errors.passwordNew}</p>}
-            </div>
             }
             <div className="mb-4">
                 <label htmlFor="type" className="block text-gray-200 font-bold mb-2">Type</label>
