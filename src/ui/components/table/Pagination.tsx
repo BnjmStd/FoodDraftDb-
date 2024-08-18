@@ -4,7 +4,7 @@ import {
     FaRegArrowAltCircleLeft 
 } from "react-icons/fa";
 
-export const Pagination = ({
+const Pagination = ({
     totalPosts,
     postsPerPage,
     setCurrentPage,
@@ -38,3 +38,5 @@ export const Pagination = ({
         </div>
     )
 }
+
+export default Pagination

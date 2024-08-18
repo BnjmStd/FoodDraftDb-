@@ -5,16 +5,18 @@ import ArrowDown from '@/ui/icons/ArrowDown'
 import Search from '@/ui/icons/Search'
 import { Category } from '@prisma/client'
 
-import { 
-    usePathname, 
-    useRouter, 
-    useSearchParams 
+import {
+    usePathname,
+    useRouter,
+    useSearchParams
 } from 'next/navigation'
 
 import {
     useState,
     useEffect
 } from 'react'
+
+import { useDebouncedCallback } from 'use-debounce'
 
 export const SearchFood = () => {
 
@@ -23,7 +25,7 @@ export const SearchFood = () => {
 
     const { replace } = useRouter()
 
-    const handleSearch = (term: string) => {
+    const handleSearch = useDebouncedCallback((term: string) => {
         const params = new URLSearchParams(searchParams)
 
         if (term) {
@@ -33,17 +35,19 @@ export const SearchFood = () => {
         }
 
         replace(`${pathName}?${params.toString()}`)
-    }
+
+    }, 300)
 
     return (
         <input
             type="search"
             id="search-dropdown"
             className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 
-        rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 
-        focus:ring-blue-500 focus:border-blue-500"
+                rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 
+                focus:ring-blue-500 focus:border-blue-500"
             placeholder="Cereals ... "
             onChange={(e) => handleSearch(e.target.value)}
+            defaultValue={searchParams.get('search')?.toString()}
             required
         />
     )

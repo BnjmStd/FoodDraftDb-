@@ -8,7 +8,7 @@ import { IoIosAddCircle } from "react-icons/io"
 import Spinner from "@/ui/components/loading/Spinner"
 import Table from "@/ui/components/table/Table"
 import Dialog from "@/ui/components/dialog/Dialog"
-import SearchAdmin from "@/ui/components/search/searchAdmin"
+import SearchAdmin from "@/ui/components/input/search/searchAdmin"
 
 /* forms */
 import { FoodForm } from "@/ui/components/forms/createNewFoodForm"

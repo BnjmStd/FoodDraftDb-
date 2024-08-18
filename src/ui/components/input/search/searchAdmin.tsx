@@ -1,4 +1,3 @@
-import { BsSearchHeart } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 
 export default function SearchAdmin ({
