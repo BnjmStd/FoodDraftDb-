@@ -82,12 +82,17 @@ export default function Page() {
         reloadData()
     }, [])
 
-    const column = ["name", "description", "categories"]
+    const column = ["id", "name", "description", "categories"]
 
     if (loading) return <Spinner />
 
     return (
         <>
+            <Dialog
+                title="Create New Foods"
+            >
+                <FoodForm />
+            </Dialog>
             <div className="flex flex-col gap-2">
                 <main className="flex flex-row gap-2 justify-between">
                     <SearchAdmin setFiltering={setFiltering} />
@@ -100,7 +105,7 @@ export default function Page() {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={() => { }}
+                            onClick={() => { setIsSetOpen(true) }}
                         >
                             <IoIosAddCircle />
                         </button>

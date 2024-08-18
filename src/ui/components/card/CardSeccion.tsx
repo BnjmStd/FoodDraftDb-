@@ -4,7 +4,8 @@ import { getAllCategory } from "@/lib/actions/category";
 import Spinner from "../loading/Spinner";
 import CardBase from "./CardBase";
 import { Category } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+import { ErrorContext } from "@/lib/context/error";
 
 const COLORS = [
     'bg-red-900',
@@ -37,19 +38,43 @@ export default function CardSeccion() {
 
     const [foods, setFoods] = useState<CategoryPremium[]>([])
     const [loading, setLoading] = useState(true)
-
+    const {setError} = use(ErrorContext)
     useEffect(() => {
         const fetchCategory = async () => {
-            const fetchedCategorys = await getAllCategory()
+            try {
+                const response = await getAllCategory()
+    
+                if (response.error) {
+                    setError({
+                        type: 'error',
+                        message: response.message
+                    })
+                }
+    
+                if (response.ok) {
+                    
+                    const updatedFoods = response.data.map(food => ({
+                        ...food,
+                        image: IMAGES[Math.floor(Math.random() * IMAGES.length)],
+                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                    }));
+        
+                    setFoods(updatedFoods)
+                    setLoading(false)
 
-            const updatedFoods = fetchedCategorys.map(food => ({
-                ...food,
-                image: IMAGES[Math.floor(Math.random() * IMAGES.length)],
-                color: COLORS[Math.floor(Math.random() * COLORS.length)],
-            }));
-
-            setFoods(updatedFoods)
-            setLoading(false)
+                    setError({
+                        type: 'info',
+                        message: 'category ok'
+                    })
+                }
+            } catch (error) {
+                setError({
+                    type: 'error',
+                    message: 'Algo salío mal'
+                })
+            } finally {
+                setLoading(false)
+            }
         };
 
         fetchCategory();

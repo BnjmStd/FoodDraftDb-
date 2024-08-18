@@ -16,7 +16,6 @@ import {
 import {
     redirect
 } from "next/navigation"
-import { User } from "@prisma/client";
 
 export const createNewAdmin = async (prev, formData: FormData) => {
 
@@ -356,16 +355,6 @@ export const editUser = async (prev, formData: FormData) => {
         };
     }
 
-    /*const currentForm = {   
-        id: id,
-        name: name,
-        email: email,
-        password: pwd,
-        newPassword: newPwd,
-        country: country,
-        type: type
-    }*/
-
     const existingUser = await prisma.user.findUnique({
         where: { id },
     });
@@ -377,7 +366,6 @@ export const editUser = async (prev, formData: FormData) => {
         };
     }
 
-    // Validar la contraseña antigua
     const isPasswordValid = await bcrypt.compare(pwd, existingUser.password);
     if (!isPasswordValid) {
         return {
@@ -395,14 +383,12 @@ export const editUser = async (prev, formData: FormData) => {
         updatedAt: new Date(),
     }
 
-    // Si se proporcionó una nueva contraseña, hash y actualizarla
     if (newPwd) {
         const salt = await bcrypt.genSalt(5);
         const hashedNewPassword = await bcrypt.hash(newPwd, salt);
         updatedData.password = hashedNewPassword
     }
 
-    // Actualizar el usuario en la base de datos
     try {
         const updatedUser = await prisma.user.update({
             where: { id },

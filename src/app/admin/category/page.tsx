@@ -6,66 +6,91 @@ import { IoIosAddCircle } from "react-icons/io"
 
 /* components */
 import Spinner from "@/ui/components/loading/Spinner"
-import Table from "@/ui/components/table/Table"
 import Dialog from "@/ui/components/dialog/Dialog"
 import SearchAdmin from "@/ui/components/input/search/searchAdmin"
-
-/* forms */
-import { FoodForm } from "@/ui/components/forms/createNewFoodForm"
-
-/* actions */
-import { 
-    Category, 
-} from "@prisma/client"
 
 import { getAllCategory } from "@/lib/actions/category"
 
 /* react */
 import React, {
+    use,
     useEffect,
     useState
 } from 'react'
-
+import { AdminContext } from "@/lib/context/admin"
+import { ErrorContext } from "@/lib/context/error"
+import CategoryForm from "@/ui/components/forms/createNewCategoryForm"
+import TableCategory from "@/ui/components/table/TableCategory"
 
 export default function Page () {
-    const [categorys, setCategorys] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
-    const column = ["name"]
+    const [filtering, setFiltering] = useState<string>()
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const {
+        categoryData,
+        setCategoryData,
+        setIsLoading,
+        loading,
+    } = use(AdminContext)
+
+    const {
+        setIsSetOpen,
+        setError,
+    } = use(ErrorContext)
 
     const reloadData = async () => {
-        const fetchedCategorys = await getAllCategory();
-        setCategorys(fetchedCategorys);
-        setLoading(false);
-    }
+        try {
+            const response = await getAllCategory()
+
+            if (response.error) {
+                setError({
+                    type: 'error',
+                    message: response.message
+                })
+            }
+
+            if (response.ok) {
+                setCategoryData(response.data);
+                setError({
+                    type: 'info',
+                    message: 'category ok'
+                })
+            }
+        } catch (error) {
+            setError({
+                type: 'error',
+                message: 'Algo salío mal'
+            })
+        } finally {
+            setIsLoading(false)
+        }
+    };
 
     useEffect(() => {
-        const fetchFoods = async () => {
-            const fetchedCategorys = await getAllCategory();
-            setCategorys(fetchedCategorys);
-            setLoading(false);
-        };
+        reloadData()
+    }, [])
 
-        fetchFoods();
+    const filteredData = filtering
+        ? categoryData.filter(category =>
+            category.name.toLowerCase().includes(filtering.toLowerCase()) ||
+            category.id.toString().includes(filtering)
+        )
+        : categoryData;
 
-    }, []);
+    const column = ["id", "name", "actions"]
 
     if (loading) return <Spinner />
 
     return (
         <>
             <Dialog 
-                isOpen={isDialogOpen} 
-                isSetOpen={setIsDialogOpen} 
                 title="New Category" 
             >
-                <FoodForm />
+                <CategoryForm />
             </Dialog>
 
             <div className="flex flex-col gap-2">
                 <main className="flex flex-row gap-2 justify-between">
-                    <SearchAdmin />
+                    <SearchAdmin setFiltering={setFiltering} />
                     <div className="flex items-center">
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
@@ -75,23 +100,19 @@ export default function Page () {
                         </button>
                         <button
                             className="p-2 hover:bg-gray-200 rounded-md"
-                            onClick={() => setIsDialogOpen(true)}
+                            onClick={() => setIsSetOpen(true)}
                         >
                             <IoIosAddCircle />
                         </button>
                     </div>
                 </main>
-                <footer className="flex-1">
-                    {categorys.length === 0 ? (
-                        <p>No foods found.</p>
+                <div className="overflow-x-auto p-1">
+                    {filteredData.length === 0 ? (
+                        <p>No category found.</p>
                     ) : (
-                        <Table
-                            columns={column}
-                            onEdit={() => { }}
-                            data={categorys}
-                        />
+                        <TableCategory column={column} data={filteredData} />
                     )}
-                </footer>
+                </div>
             </div>
         </>
     );

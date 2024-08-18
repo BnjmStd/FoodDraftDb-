@@ -1,6 +1,7 @@
 'use client'
 
 import { getAllCategory } from '@/lib/actions/category'
+import { ErrorContext } from '@/lib/context/error'
 import ArrowDown from '@/ui/icons/ArrowDown'
 import Search from '@/ui/icons/Search'
 import { Category } from '@prisma/client'
@@ -13,7 +14,8 @@ import {
 
 import {
     useState,
-    useEffect
+    useEffect,
+    use
 } from 'react'
 
 import { useDebouncedCallback } from 'use-debounce'
@@ -58,15 +60,39 @@ export default function SearchInputFoods() {
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        const fetchCategory = async () => {
-            const fetchedCategorys = await getAllCategory()
-            setCategories(fetchedCategorys)
+    const { setError } = use(ErrorContext)
+
+    const fetchCategory =  async () => {
+        try {
+            const response = await getAllCategory()
+
+            if (response.error) {
+                setError({
+                    type: 'error',
+                    message: response.message
+                })
+            }
+
+            if (response.ok) {
+                setCategories(response.data);
+                setError({
+                    type: 'info',
+                    message: 'category ok'
+                })
+            }
+        } catch (error) {
+            setError({
+                type: 'error',
+                message: 'Algo salío mal'
+            })
+        } finally {
             setLoading(false)
         }
+    }
 
+
+    useEffect(() => {
         fetchCategory()
-
     }, [])
 
     const [isDropdownOpen, setDropdownOpen] = useState(false)

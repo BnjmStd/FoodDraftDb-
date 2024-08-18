@@ -1,9 +1,13 @@
 import { createNewFood } from "@/lib/actions/food";
+import { useActionState } from "react";
 
 export const FoodForm = () => {
+
+    const [state, action, isPending] = useActionState(createNewFood, null)
+
     return (
         <form 
-            action={createNewFood} 
+            action={action} 
             className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
             <div className="mb-4">
                 <label 

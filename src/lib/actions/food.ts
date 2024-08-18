@@ -1,7 +1,6 @@
 'use server'
 
 import prisma from "./prisma";
-import { redirect } from "next/navigation"
 import { verifySession } from "./session";
 
 export const getAllFood = async () => {
@@ -32,7 +31,7 @@ export const getAllFood = async () => {
     }
 }
 
-export const createNewFood = async (formData: FormData) => {
+export const createNewFood = async (prev: void | null, formData: FormData) => {
 
     const name = formData.get('name')?.toString() || '';
     const description = formData.get('description')?.toString() || '';
@@ -52,5 +51,4 @@ export const createNewFood = async (formData: FormData) => {
 
     console.log(newFood);
 
-    redirect("/admin");
 }
