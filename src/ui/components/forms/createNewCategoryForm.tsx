@@ -1,13 +1,23 @@
 import { newCategory } from "@/lib/actions/category"
-import { useActionState } from "react"
+import { AdminContext } from "@/lib/context/admin"
+import { ErrorContext } from "@/lib/context/error"
+import { use, useActionState, useEffect } from "react"
 
 export default function CategoryForm() {
 
+    const { setCategoryData } = use(AdminContext)
+    const { setIsSetOpen } = use(ErrorContext)
     const [state, action, isPending] = useActionState(newCategory, null)
+
+    useEffect(() => {
+        if (state?.success && state.message) {
+            setCategoryData(prevState => [...prevState, state.message]);
+            setIsSetOpen(false)
+        }
+    }, [state?.success]);
 
     return (
         <form action={action} className="rounded-lg grid gap-1  grid-cols-1">
-
             <div className="">
                 <label
                     htmlFor="name"
@@ -27,7 +37,7 @@ export default function CategoryForm() {
             {state?.errors?.name &&
                     <p className='error font-bold'>{state.errors.name}</p>}
             <div className="flex justify-center ">
-                <button type="submit" className="w-full overflow-hidden px-4 py-2 bg-blue-500 text-white 
+                <button onClick={() => {}} type="submit" className="w-full overflow-hidden px-4 py-2 bg-blue-500 text-white 
                 font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring 
                 focus:ring-blue-200">
                     Submit

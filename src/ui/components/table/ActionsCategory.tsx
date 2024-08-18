@@ -1,3 +1,6 @@
+import { deleteCategory } from "@/lib/actions/category";
+import { AdminContext } from "@/lib/context/admin";
+import { ErrorContext } from "@/lib/context/error";
 import { use } from "react";
 import { 
 
@@ -10,8 +13,33 @@ export default function ActionsUser({
     id: number
 }) {
 
+    const { setCategoryData } = use(AdminContext)
+    const { setError } = use(ErrorContext)
+
     const handleDelete = async (id: number) => {
-        console.log(id)
+        try {
+            const response = await deleteCategory(id);
+
+            if (response.error) {
+                setError({
+                    message: response.message,
+                    type: 'error'
+                })
+            } else {
+                
+                setError({
+                    message: 'Category eliminada',
+                    type: 'info'
+                })
+
+                setCategoryData(prevData => prevData.filter(category => category.id !== id));
+            }
+        } catch (error) {
+            setError({
+                message: 'Ocurrió un error inesperado al eliminar la categoria.',
+                type: 'error'
+            })
+        }
     }
 
     return (

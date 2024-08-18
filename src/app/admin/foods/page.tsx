@@ -10,7 +10,6 @@ import Dialog from "@/ui/components/dialog/Dialog"
 
 /* forms */
 import { FoodForm } from "@/ui/components/forms/createNewFoodForm"
-
 import { getAllFood } from "@/lib/actions/food"
 
 /* react */
@@ -82,7 +81,7 @@ export default function Page() {
         reloadData()
     }, [])
 
-    const column = ["id", "name", "description", "categories"]
+    const column = ["id", "name", "description", "categories", "actions"]
 
     if (loading) return <Spinner />
 

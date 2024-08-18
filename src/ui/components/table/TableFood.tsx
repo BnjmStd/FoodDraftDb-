@@ -31,7 +31,7 @@ export default function TableFood({
 
             <caption className="text-black text-xl text-center 
             font-bold uppercase p-2">
-                Usuarios
+                Foods
             </caption>
 
             <Thead column={column} />

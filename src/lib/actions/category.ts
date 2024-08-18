@@ -3,16 +3,9 @@
 import { cache } from "react"
 import { verifySession } from "./session"
 import prisma from "./prisma"
-import { error } from "console";
 
 export const getAllCategory = cache(
     async () => {
-
-        const isUser = await verifySession()
-
-        if (!isUser) {
-            return { error: true, message: 'No user session found' }
-        }
 
         try {
             const categorys = await prisma.category.findMany()
@@ -29,6 +22,27 @@ export const getAllCategory = cache(
         }
     }
 );
+
+export const deleteCategory = async (categoryId: number) => {
+    try {
+
+        const userCurrentId = await verifySession()
+
+        if (!userCurrentId) return { error: true, message: 'Error al comprobar id' }
+
+        const deletedCategory = await prisma.category.delete({
+            where: {
+                id: categoryId
+            }
+        });
+
+        return { ok: true, data: deletedCategory };
+
+    } catch (error) {
+
+        return { error: true, message: 'Error al eliminar la categoria' };
+    }
+}
 
 export const newCategory = async (prev, formData: FormData) => {
     
@@ -65,7 +79,10 @@ export const newCategory = async (prev, formData: FormData) => {
 
         return {
             success: true,
-            message: 'Categoria aadd' + category.name,
+            message: {
+                id: category.id,
+                name: category.name
+            }
         };
 
     } catch (error) {
