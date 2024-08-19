@@ -1,4 +1,4 @@
-interface FormDataObj {
+interface FormDataUser {
     email?: string;
     name?: string
     password?: string;
@@ -10,7 +10,14 @@ interface FormDataObj {
     checkBox?: string;
 }
 
-export const validateUserForm = (data: FormDataObj) => {
+interface FormDataFood {
+    name?: string, 
+    description?: string,
+    category?: string | number,
+    userId?: string | number
+}
+
+export const validateUserForm = (data: FormDataUser) => {
 
     const errors: { [key: string]: string } = {};
 
@@ -53,4 +60,28 @@ export const validateUserForm = (data: FormDataObj) => {
     }
 
     return errors;
+}
+
+export const validateFoodForm = (data: FormDataFood) => {
+    
+    const errors: { [key: string]: string } = {};
+    
+    if (data.name && data.name.length < 2) {
+        errors.name = 'Name must be at least 2 characters long';
+    }
+
+    if (data.description && data.description.length < 5) {
+        errors.name = 'description must be at least 5 characters long';
+    }
+
+    /*
+    
+    if (data.category && typeof data.category == "string") {
+
+    }
+    
+    */
+
+    return errors
+
 }

@@ -1,5 +1,5 @@
 import { Food } from "@prisma/client"
-import ActionsCategory from "../ActionsCategory"
+import ActionsFood from "../ActionsFood"
 
 export default function TbodyFood({
     data,
@@ -14,7 +14,7 @@ export default function TbodyFood({
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{`# ${date.id}`}</td>
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{date.name}</td>
                     <td className="px-6 py-4  text-center whitespace-nowrap text-sm ">{date.description}</td>
-                    <ActionsCategory id={date.id} />
+                    <ActionsFood id={date.id} />
                 </tr>
             ))}
         </tbody>

@@ -1,3 +1,5 @@
+'use client'
+
 import { getAllCategory } from "@/lib/actions/category";
 import { createNewFood } from "@/lib/actions/food";
 import { AdminContext } from "@/lib/context/admin";
@@ -41,6 +43,19 @@ export const FoodForm = () => {
         reloadData()
     }, [])
 
+
+
+    useEffect(() => {
+        if (state?.success && state.message) {
+            console.log(state?.success && state.message)
+        }
+
+        if(state?.errors?.generate) {
+            console.log(state.errors?.generate)
+        }
+
+    }, [state?.success, state?.message]);
+
     return (
         <form 
             action={action} 
@@ -60,6 +75,8 @@ export const FoodForm = () => {
                     focus:ring focus:ring-indigo-200"
                 />
             </div>
+            {state?.errors?.name &&
+                    <p className='error'>{state.errors.name}</p>}
             <div className="mb-4">
                 <label 
                     htmlFor="description" 

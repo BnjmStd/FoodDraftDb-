@@ -81,7 +81,7 @@ export default function Page() {
         reloadData()
     }, [])
 
-    const column = ["id", "name", "description", "categories", "actions"]
+    const column = ["id", "name", "description", "actions"]
 
     if (loading) return <Spinner />
 

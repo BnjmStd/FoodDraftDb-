@@ -62,7 +62,7 @@ export default function SearchInputFoods() {
 
     const { setError } = use(ErrorContext)
 
-    const fetchCategory =  async () => {
+    const fetchCategory = async () => {
         try {
             const response = await getAllCategory()
 
@@ -90,84 +90,57 @@ export default function SearchInputFoods() {
         }
     }
 
-
     useEffect(() => {
         fetchCategory()
     }, [])
 
-    const [isDropdownOpen, setDropdownOpen] = useState(false)
-
-    const toggleDropdown = () => {
-        setDropdownOpen(!isDropdownOpen)
-    };
-
-    const handleClickOutside = (event: any) => {
-        if (!event.target.closest('#dropdown-button') && !event.target.closest('#dropdown')) {
-            setDropdownOpen(false)
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, []);
 
     if (loading) return <div>Loading...</div>
 
     return (
-        <div className="w-full">
-            <form className="max-w-lg mx-auto">
-                <div className="relative flex">
-                    <button
-                        id="dropdown-button"
-                        onClick={toggleDropdown}
-                        className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 
-                        text-sm font-medium text-center text-gray-900 bg-gray-100 border 
-                        border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none 
-                        focus:ring-gray-100"
-                        type="button"
-                    >
-                        categories
-                        <ArrowDown />
-                    </button>
-                    <div
-                        id="dropdown"
-                        className={`absolute z-10 
-                            ${isDropdownOpen
-                                ? 'block'
-                                : 'hidden'
-                            } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-1`}
-                        style={{
-                            top: '100%',
-                            left: 0
-                        }}
-                    >
-                        <ul className="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
-                            {categories.map(category => (
-                                <li key={category.id}>
-                                    <a
-                                        type="button"
-                                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
-                                    >
-                                        {category.name}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="relative w-full">
-                        <SearchFood />
-                        <button
-                            type="submit"
-                            className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full 
-                            text-white bg-green-700 rounded-e-lg border border-green-700 
-                            hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                        >
-                            <Search />
-                        </button>
-                    </div>
-                </div>
-            </form>
+        <div className="w-full flex">
+            <SearchFood />
+            <Example categories={categories} />
         </div>
     )
+}
+
+export function Example({ 
+    categories 
+}: { 
+    categories: Category[] 
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleMenu = () => setIsOpen(!isOpen);
+
+    return (
+        <div className="relative inline-block text-left">
+            <div>
+                <button
+                    onClick={toggleMenu}
+                    className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                    Options
+                    <ArrowDown />
+                </button>
+            </div>
+
+            {isOpen && (
+                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
+                    <ul className="py-1">
+                        {categories.map(category => (
+                            <li key={category.id}>
+                                <a
+                                    type="button"
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                >
+                                    {category.name}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
 }
