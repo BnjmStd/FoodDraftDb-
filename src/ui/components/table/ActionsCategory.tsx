@@ -3,11 +3,10 @@ import { AdminContext } from "@/lib/context/admin";
 import { ErrorContext } from "@/lib/context/error";
 import { use } from "react";
 import { 
-
     FaTrashAlt 
 } from "react-icons/fa";
 
-export default function ActionsUser({
+export default function ActionCategory({
     id,
 }: {
     id: number

@@ -1,14 +1,50 @@
+import { getAllCategory } from "@/lib/actions/category";
 import { createNewFood } from "@/lib/actions/food";
-import { useActionState } from "react";
+import { AdminContext } from "@/lib/context/admin";
+import { use, useActionState, useEffect } from "react";
 
 export const FoodForm = () => {
 
     const [state, action, isPending] = useActionState(createNewFood, null)
 
+    const {setIsLoading, setCategoryData, categoryData} = use(AdminContext)
+
+    const reloadData = async () => {
+        try {
+            const response = await getAllCategory()
+
+            if (response.error) {
+                console.log({
+                    type: 'error',
+                    message: response.message
+                })
+            }
+
+            if (response.ok) {
+                setCategoryData(response.data);
+                console.log({
+                    type: 'info',
+                    message: 'category ok'
+                })
+            }
+        } catch (error) {
+            console.log({
+                type: 'error',
+                message: 'Algo salío mal'
+            })
+        } finally {
+            setIsLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        reloadData()
+    }, [])
+
     return (
         <form 
             action={action} 
-            className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
+            className="rounded-lg grid sm:grid-cols-2 gap-4 p-4 grid-cols-1">
             <div className="mb-4">
                 <label 
                     htmlFor="name" 
@@ -38,19 +74,21 @@ export const FoodForm = () => {
                     focus:ring focus:ring-indigo-200"
                 />
             </div>
-            <div className="mb-4">
-                <label 
-                    htmlFor="userId" 
-                    className="block text-gray-700 font-bold mb-2"
+            <div>
+                <label htmlFor="categoryId" className="block text-gray-700 font-bold mb-2 ">Category:</label>
+                <select
+                    id="categoryId"
+                    name="categoryId"
+                    className="p-2"
+                    required
                 >
-                    User ID</label>
-                <input
-                    type="number"
-                    id="userId"
-                    name="userId"
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none 
-                    focus:ring focus:ring-indigo-200"
-                />
+                    <option value="">Select a category</option>
+                    {categoryData.map(category => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="flex justify-center">
                 <button 

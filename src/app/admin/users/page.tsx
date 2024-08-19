@@ -11,7 +11,10 @@ import TableUser from "@/ui/components/table/TableUser"
 import Spinner from "@/ui/components/loading/Spinner"
 
 /* forms */
-import { UserForm } from "@/ui/components/forms/createNewUserForm"
+import { 
+    EditUserForm, 
+    UserForm 
+} from "@/ui/components/forms/createNewUserForm"
 
 import {
     getAllUser,
@@ -36,7 +39,8 @@ export default function Page() {
         userData,
         setUserData,
         loading,
-        setIsLoading
+        setIsLoading,
+        selected
     } = use(AdminContext)
 
     const {
@@ -93,7 +97,7 @@ export default function Page() {
             <Dialog
                 title="Create New Users"
             >
-                <UserForm />
+                { selected ? <EditUserForm /> : <UserForm />}
             </Dialog>
 
             <div className="w-full border-2 rounded-md space-y-2">

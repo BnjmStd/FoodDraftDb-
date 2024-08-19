@@ -8,13 +8,13 @@ export default function CategoryForm() {
     const { setCategoryData } = use(AdminContext)
     const { setIsSetOpen } = use(ErrorContext)
     const [state, action, isPending] = useActionState(newCategory, null)
-
+    
     useEffect(() => {
         if (state?.success && state.message) {
-            setCategoryData(prevState => [...prevState, state.message]);
+            setCategoryData(prevState => [...prevState, state?.message]);
             setIsSetOpen(false)
         }
-    }, [state?.success]);
+    }, [state?.success, state?.message]);
 
     return (
         <form action={action} className="rounded-lg grid gap-1  grid-cols-1">

@@ -31,17 +31,19 @@ export const getAllFood = async () => {
     }
 }
 
-export const createNewFood = async (prev: void | null, formData: FormData) => {
+export const createNewFood = async (prev, formData: FormData) => {
 
-    const name = formData.get('name')?.toString() || '';
-    const description = formData.get('description')?.toString() || '';
-    const userId = Number(formData.get('userId'));
+    const isUser = await verifySession();
 
-    if (!name || !description || !userId) {
-        throw new Error('All fields are required');
+    if (!isUser) {
+        return { error: true, message: 'No user session found' };
     }
 
-    const newFood = await prisma.food.create({
+    console.log(isUser.userId)
+
+    /* 
+    
+        const newFood = await prisma.food.create({
         data: {
             name,
             description,
@@ -49,6 +51,8 @@ export const createNewFood = async (prev: void | null, formData: FormData) => {
         },
     });
 
-    console.log(newFood);
+    */
+
+    console.log(formData);
 
 }

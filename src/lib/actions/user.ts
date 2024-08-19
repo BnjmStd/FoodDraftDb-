@@ -4,9 +4,7 @@ const bcrypt = require('bcryptjs');
 
 import prisma from "./prisma"
 
-import {
-    cache
-} from "react"
+import { cache } from "react"
 
 import {
     createSession,
@@ -17,121 +15,66 @@ import {
     redirect
 } from "next/navigation"
 
+import { validateUserForm } from "../helper";
+
+
+const typeUser: 'User' | 'Admin' = 'User'
+
 export const createNewAdmin = async (prev, formData: FormData) => {
 
-    const errors: {
-        [key: string]: string
-    } = {}
-
-    // email
-
-    const email = formData.get('email') as string
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.email = 'Invalid email format or missing email'
+    const dataPrevUser = {
+        name: formData.get('name') as string,
+        country: formData.get('country') as string,
+        email: formData.get('email') as string,
+        password: formData.get('password') as string,
+        type: formData.get('type') as string,
     }
 
-    // password
+    const errors = validateUserForm(dataPrevUser);
 
-    const pwd = formData.get('password') as string | null
-
-    if (!pwd || pwd.length < 8) {
-        errors.password = 'Password must be at least 8 characters long'
-    }
-
-    // country 
-
-    const country = formData.get('country') as string
-
-    if (!country || country.length < 1) {
-        errors.country = 'country must be selected'
-    }
-
-    // type
-
-    const type = formData.get('type') as string
-
-    if (!type) {
-        errors.type = 'type selected pls'
-    }
-
-    // name
-
-    const name = formData.get('name') as string
-
-    if (!name || name.length < 3) {
-        errors.name = 'name must be at least 3 characters long'
-    }
-
-    if (Object.keys(errors).length > 0) {
-
-        return {
-            success: false,
-            errors
-        }
-    }
+    if (Object.keys(errors).length > 0) return { success: false, errors }
 
     const salt = await bcrypt.genSalt(5);
-    const hashedPwd = await bcrypt.hash(pwd, salt)
+    const hashedPwd = await bcrypt.hash(dataPrevUser.password, salt)
 
-    const newUser = await prisma.user.create({
-        data: {
-            name: name,
-            country: country,
-            email: email,
-            password: hashedPwd,
-            type: type
+    try {
+        const newUser = await prisma.user.create({
+            data: {
+                ...dataPrevUser,
+                password: hashedPwd
+            }
+        })
+
+        return {
+            success: true,
+            message: newUser
         }
-    })
 
-    return {
-        success: true,
-        message: 'Usuario agregado' + newUser.name
+    } catch (error) {
+
+        return {
+            success: true,
+            message: {
+                error: error
+            }
+        }
     }
-
 }
 
 export const createNew = async (prev, formData: FormData) => {
 
-    const errors: {
-        [key: string]: string
-    } = {}
-
-    // email
-
-    const email = formData.get('email') as string
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.email = 'Invalid email format or missing email'
+    const dataPrevUser = {
+        email: formData.get('email') as string,
+        password: formData.get('password') as string
     }
 
-    // password
-
-    const pwd = formData.get('password') as string | null
-    const pwdConfirm = formData.get('confirmPassword') as string | null
-
-    if (!pwd || pwd.length < 8) {
-        errors.password = 'Password must be at least 8 characters long'
-    }
-
-    if (pwd !== pwdConfirm) {
-        errors.confirmPassword = 'Passwords do not match'
-    }
-
-    // checkbox
-
-    const checkBox = formData.get('check') as string | null
-
-    if (checkBox !== 'checked') {
-        errors.checkBox = 'not checked'
-    }
-
-    if (!checkBox) {
-        errors.checkBox = 'not checked'
-    }
+    const errors = validateUserForm({
+        ...dataPrevUser,
+        confirmPassword: formData.get('confirmPassword') as string,
+        checkBox: formData.get('check') as string
+    });
 
     if (Object.keys(errors).length > 0) {
-
         return {
             success: false,
             errors
@@ -139,19 +82,17 @@ export const createNew = async (prev, formData: FormData) => {
     }
 
     const salt = await bcrypt.genSalt(5);
-    const hashedPwd = await bcrypt.hash(pwd, salt)
+    const hashedPwd = await bcrypt.hash(dataPrevUser.password, salt)
 
     const newUser = await prisma.user.create({
         data: {
+            ...dataPrevUser,
+            password: hashedPwd,
             name: '',
             country: '',
-            email: email,
-            password: hashedPwd,
-            type: ''
+            type: typeUser
         }
     })
-
-    // create session
 
     const route = await createSession(newUser.id)
     redirect(`${route}`)
@@ -301,50 +242,23 @@ export const searchById = async (userId: number) => {
 
 export const editUser = async (prev, formData: FormData) => {
 
-    const errors: { [key: string]: string } = {};
-
-    // id
     const formDataId = formData.get('id');
 
     const id = formDataId !== null ? Number(formDataId) : 0;
-    
+
+    const dataPrevUser = {
+        name: formData.get('name') as string,
+        country: formData.get('country') as string,
+        email: formData.get('email') as string,
+        password: formData.get('password') as string,
+        newPassword: formData.get('newpassword') as string,
+        type: formData.get('type') as string
+    }
+
+    const errors = validateUserForm(dataPrevUser);
+
     if (isNaN(id) || id === 0) {
         errors.id = 'invalid id';
-    }
-
-    // email
-    const email = formData.get('email') as string;
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.email = 'Invalid email format or missing email';
-    }
-
-    // password 
-    const pwd = formData.get('password') as string;
-    if (pwd && pwd.length < 8) {
-        errors.password = 'Password must be at least 8 characters long';
-    }
-
-    const newPwd = formData.get('newpassword') as string;
-    if (pwd && pwd.length < 8) {
-        errors.passwordNew = 'Password must be at least 8 characters long';
-    }
-
-    // country
-    const country = formData.get('country') as string;
-    if (!country || country.length < 1) {
-        errors.country = 'Country must be selected';
-    }
-
-    // type
-    const type = formData.get('type') as string;
-    if (!type) {
-        errors.type = 'Type must be selected';
-    }
-
-    // name
-    const name = formData.get('name') as string;
-    if (!name || name.length < 3) {
-        errors.name = 'Name must be at least 3 characters long';
     }
 
     // Check for errors
@@ -366,7 +280,8 @@ export const editUser = async (prev, formData: FormData) => {
         };
     }
 
-    const isPasswordValid = await bcrypt.compare(pwd, existingUser.password);
+    const isPasswordValid = await bcrypt.compare(dataPrevUser.password, existingUser.password);
+
     if (!isPasswordValid) {
         return {
             success: false,
@@ -375,17 +290,17 @@ export const editUser = async (prev, formData: FormData) => {
     }
 
     const updatedData = {
-        name: name,
-        country: country,
-        email: email,
-        password: pwd,
-        type: type,
+        name: dataPrevUser.name,
+        country: dataPrevUser.country,
+        email: dataPrevUser.email,
+        password: dataPrevUser.password,
+        type: dataPrevUser.type,
         updatedAt: new Date(),
     }
 
-    if (newPwd) {
+    if (dataPrevUser.newPassword) {
         const salt = await bcrypt.genSalt(5);
-        const hashedNewPassword = await bcrypt.hash(newPwd, salt);
+        const hashedNewPassword = await bcrypt.hash(dataPrevUser.newPassword, salt);
         updatedData.password = hashedNewPassword
     }
 
