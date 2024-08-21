@@ -14,7 +14,7 @@ export default function RootLayout({
         <>
             <main className="overflow-y-auto min-h-[100vh]">
                 <Hero />
-                <div className="mt-20 p-4 flex justify-center items-center ">
+                <div className="mt-20 p-4 flex justify-center items-center">
                     <Suspense fallback={<Spinner />}>
                         {children}
                     </Suspense>

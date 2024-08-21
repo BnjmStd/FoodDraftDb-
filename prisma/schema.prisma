@@ -46,3 +46,17 @@ model FoodCategory {
   createdAt DateTime @default(now())
   @@id([foodId, categoryId])
 }
+
+// compuesto != nutriente != ingrediente
+
+//food {
+  //nutrientes
+  //categorias
+  //ingredientes
+    //avena:
+  //compuestos
+    //colorante:
+    //conservantes: 
+//
+
+// alimentos en secciones, ingredientes de cada alimento, generar tabla de ingredientes id , nombre, kcals,  unidades, porción, tabla nutricional

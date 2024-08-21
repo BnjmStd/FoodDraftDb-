@@ -1,31 +1,68 @@
 'use client'
 
+import { getAllCategory } from "@/lib/actions/category";
+import { ErrorContext } from "@/lib/context/error";
 import CardSeccion from "@/ui/components/card/CardSeccion";
-import SearchInputFoods from "@/ui/components/SeccionFoods/SeccionFoods";
+import { DropdownCategory, SearchFood } from "@/ui/components/SeccionFoods/SeccionFoods";
+import { Category } from "@prisma/client";
+import { use, useEffect, useState } from "react";
 
 export default function FoodContent() {
+
+    const [categories, setCategories] = useState<Category[]>([])
+
+    const [loading, setLoading] = useState(true)
+
+    const { setError } = use(ErrorContext)
+
+    const fetchCategory = async () => {
+        try {
+            const response = await getAllCategory()
+
+            if (response.error) {
+                setError({
+                    type: 'error',
+                    message: response.message
+                })
+            }
+
+            if (response.ok) {
+                setCategories(response.data);
+                setError({
+                    type: 'info',
+                    message: 'category ok'
+                })
+            }
+        } catch (error) {
+            setError({
+                type: 'error',
+                message: 'Algo salío mal'
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchCategory()
+    }, [])
+
+
+    if (loading) return <div>Loading...</div>
+
     return (
-        <div className="flex">
-            <FilterArea />
-            <CardSeccion />
+        <div className="flex flex-col">
+            <header className="flex flex-col items-center justify-center px-20">
+                <span className="flex gap-2">
+                    <DropdownCategory categories={categories} />
+                    <SearchFood />
+                </span>
+            </header>
+            <main>
+                <CardSeccion categories={categories} loading={loading} />
+            </main>
+            <footer>
+            </footer>
         </div>
     )
 }
-
-const FilterArea = () => {
-    return (
-        <div className="p-4 bg-white rounded-lg shadow-md flex-col">
-            <div className="flex flex-col justify-center items-start">
-                <SearchInputFoods />
-            </div>
-
-            <div className="mt-4 flex justify-end">
-                <button
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Apply Filters
-                </button>
-            </div>
-        </div>
-    );
-};
