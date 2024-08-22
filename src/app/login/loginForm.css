@@ -1,0 +1,193 @@
+.container--hero {
+    height: 100vh;
+    z-index: -1;
+
+    &::before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background: url(frutas.jpg);
+        background-position: center;
+    }
+
+}
+
+nav {
+
+    position: fixed;
+    z-index: 1;
+    padding: 25px 60px;
+
+    .logo-link {
+        display: inline-block;
+        width: 300px;
+        height: 100px;
+        background-image: url('MetaFoodCraft.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 10;
+    }
+
+}
+
+.form-wrapper {
+    position: absolute;
+    border-radius: 16px;
+    top: 50%;
+    left: 50%;
+    padding: 30px;
+    width: 430px;
+    background: rgba(0, 0, 0, 0.75);
+    transform: translate(-50%, -50%);
+
+    a {
+        color: royalblue;
+        text-wrap: wrap;
+    }
+
+    p {
+        color: white;
+    }
+
+    h2 {
+        color: #fff;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    form {
+        margin: 25px 0 25px;
+
+        .form-control {
+            position: relative;
+            height: 50px;
+            margin-bottom: 16px;
+
+            input {
+                height: 100%;
+                width: 100%;
+                background: #333;
+                outline: none;
+                border: none;
+                color: #fff;
+                font-size: 1rem;
+                border-radius: 4px;
+                padding: 0 20px;
+
+                &:focus+label,
+                &:not(:placeholder-shown)+label {
+                    transform: translateY(-130%);
+                    background-color: transparent;
+                    color: #fff;
+
+                }
+            }
+
+            label {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                color: #8c8c8c;
+                pointer-events: none;
+                font-size: 1rem;
+                transform: translateY(-50%);
+                transition: transform .5s ease;
+
+            }
+
+            &:has(:focus:invalid) {
+
+                input,
+                label {
+                    color: rgb(255, 0, 0);
+                }
+            }
+
+            &:has(:focus:valid) {
+
+                input,
+                label {
+                    color: rgb(0, 255, 0);
+                }
+            }
+
+            &:has(:focus-visible:invalid) input {
+
+                input,
+                label {
+                    outline-color: rgb(255, 0, 0);
+                }
+            }
+
+            &:has(:focus-visible:valid) input {
+
+                input,
+                label {
+                    outline-color: rgb(0, 255, 0);
+                }
+            }
+
+            span {
+                color: #ffffff;
+                height: 2rem;
+                cursor: pointer;
+                position: absolute;
+                top: 25%;
+                right: 5%;
+                width: 25px;
+                z-index: 1;
+            }
+
+        }
+
+        button {
+            width: 100%;
+            padding: 16px 0;
+            font-size: 1rem;
+            border-radius: 16px;
+            border: none;
+            outline: none;
+            background: royalblue;
+            color: white;
+            font-weight: 500;
+
+            &:hover {
+                background: rgba(65, 105, 225, 0.797);
+            }
+        }
+    }
+}
+
+.form-help {
+    margin-top: 10px;
+    color: rgb(173, 163, 163);
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    .remember-me {
+        input {
+            width: 20px;
+            height: 20px;
+            accent-color: rgb(0, 0, 0);
+        }
+    }
+}
+
+@media (width < 740px) {
+
+    nav,
+    .container--hero::before {
+        display: none;
+    }
+
+    nav,
+    .form-wrapper {
+        padding: 20px;
+    }
+}
