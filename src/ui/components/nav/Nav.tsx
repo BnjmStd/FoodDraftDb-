@@ -6,17 +6,13 @@ import {
     useState
 } from "react"
 
-import { 
-    useRouter, 
-    usePathname 
+import {
+    useRouter,
+    usePathname
 } from "next/navigation"
 
-export default function Nav({
-    seccion
-}: {
-    seccion: string[]
-}) {
-    const router = useRouter()
+
+/*    const router = useRouter()
 
     const pathName = usePathname()
 
@@ -32,7 +28,20 @@ export default function Nav({
             ? "/"
             : `/${seccion[index].toLowerCase()}`
         router.push(path)
-    }
+    } */
+
+
+export default function Nav({
+    seccion
+}: {
+    seccion: string[]
+}) {
+
+    const [activeIndex, setActiveIndex] = useState<number | null>()
+
+    const handleSetActive = (index: number) => {
+        setActiveIndex(index);
+    };
 
     return (
         <nav className="items-center justify-center hidden md:flex">
@@ -44,6 +53,7 @@ export default function Nav({
                 {seccion.map((item, index) => (
                     <li key={index}>
                         <a
+                            href={`#${item.toLowerCase()}`}
                             onClick={() => handleSetActive(index)}
                             className={activeIndex === index ? "underline-custom" : ""}
                         >

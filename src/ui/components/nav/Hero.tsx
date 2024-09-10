@@ -6,7 +6,7 @@ import NavbarSm from "./NavbarSm";
 
 export default function hero() {
     
-    const SECCION = ["Home", "Foods", "About", "Pricing"]
+    const SECCION = ["Home", "About", "Pricing", "Services"]
 
     return (
         <header id="landing-header"
@@ -14,6 +14,7 @@ export default function hero() {
             justify-between text-black z-40 border-b-2 text-sm"
         >
             <Logo />
+
             <Nav seccion={SECCION} />
 
             {/* botones */}
