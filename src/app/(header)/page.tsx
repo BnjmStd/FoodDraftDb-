@@ -55,6 +55,7 @@ const About = () => {
                     </div>
 
                     <div className="about__skill-card">
+                        <div className="about__card-bg"></div>
                         <h1>60+</h1>
                         <h3>Succes skill</h3>
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis voluptates inventore nesciunt et cons</p>
