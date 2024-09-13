@@ -49,6 +49,7 @@ const About = () => {
                 <p className="about__description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis sapiente iste quisquam nemo deserunt temporibus, nihil minima, ex, dicta hic doloribus commodi reiciendis voluptatum voluptate eveniet. Temporibus quia dignissimos aliquid.</p>
                 <div className="about__skills">
                     <div className="about__skill-card">
+                        <div className="about__card-bg"></div>
                         <h1>60+</h1>
                         <h3>Succes skill</h3>
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis voluptates inventore nesciunt et cons</p>
@@ -62,12 +63,14 @@ const About = () => {
                     </div>
 
                     <div className="about__skill-card">
+                        <div className="about__card-bg"></div>
                         <h1>60+</h1>
                         <h3>Succes skill</h3>
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis voluptates inventore nesciunt et cons</p>
                     </div>
 
                     <div className="about__skill-card">
+                        <div className="about__card-bg"></div>
                         <h1>60+</h1>
                         <h3>Succes skill</h3>
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis voluptates inventore nesciunt et cons</p>
