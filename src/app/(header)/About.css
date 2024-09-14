@@ -91,7 +91,36 @@
             position: relative;
             overflow: hidden;
             background-color: #121212;
-            transition: all 0.5s ease;
+            transition: all .9s ease;
+            z-index: 3;
+
+            &:nth-child(1) .about__card-bg {
+                background-color: #96db0b;
+            }
+            
+            &:nth-child(2) .about__card-bg {
+                background-color: #f93434;
+            }
+
+            &:nth-child(3) .about__card-bg {
+                background-color: #b42d77;
+            }
+            
+            &:nth-child(4) .about__card-bg {
+                background-color: #9222dd;
+            }
+
+            &:hover {
+                & .about__card-bg {
+                    transform: scale(10);
+                    z-index: -1; /* Envía el fondo hacia atrás */
+                }
+            
+                & h1, & h3, & p {
+                    color: white;
+                    z-index: 2; /* Asegura que el texto esté por encima */
+                }
+            }
 
             & .about__card-bg {
                 height: 128px;
@@ -102,35 +131,28 @@
                 right: -75px;
                 border-radius: 50%;
                 z-index: 1;
-                transition: all 0.5s ease;
-            
-                &:hover {
-                    transform: scale(10);
-                    z-index: 0;
-                }
-            
+                transition: all 0.6s ease;
+            }
+
+            & h1, & h3, & p {
+                transition: all .5s ease;
             }
 
             & h1 {
                 font-size: 2rem;
                 font-weight: bold;
                 color: slateblue;
-                z-index: 2;
             }
 
             & h3 {
                 font-size: 1.6rem;
                 font-weight: lighter;
-                z-index: 2;
             }
 
             & p {
                 text-wrap: pretty;
                 text-overflow: ellipsis;
-                z-index: 2;
             }
         }
-
     }
-
 }
