@@ -130,16 +130,56 @@ const Pricing = () => {
             <div className="services__container container mx-auto px-4 text-center">
                 <h2 className="services__title">Pricing</h2>
                 <main className="services__cards">
-                    <div className="animated_card">
-                        <span className="">$</span>
+                    <div className="services__card-wrapper animated_card">
+                        <main className="services__card">
+                            <h1 className="services__card-title">Free</h1>
+                            <p className="services__card-description">Personal, non-commercial use</p>
+                            <h1 className="services__card-price">$0</h1>
+                        </main>
+                        <div className="services__card-features">
+                            <span></span>
+                            <ul className="services__card-list">
+                                <li>Personal use</li>
+                                <li>Run containers</li>
+                                <li>Run Linux machine</li>
+                                <li>Community support</li>
+                            </ul>
+                            <button className="services__button">Create account</button>
+                        </div>
                     </div>
 
-                    <div className="animated_card">
-                        <span className="">$</span>
+                    <div className="services__card-wrapper animated_card">
+                        <main className="services__card">
+                            <h1 className="services__card-title">Pro</h1>
+                            <p className="services__card-description">For small teams</p>
+                            <h1 className="services__card-price">$25</h1>
+                        </main>
+                        <div className="services__card-features">
+                            <ul className="services__card-list">
+                                <li>Team collaboration</li>
+                                <li>Priority support</li>
+                                <li>Advanced security</li>
+                                <li>API access</li>
+                            </ul>
+                            <button className="services__button">Get started</button>
+                        </div>
                     </div>
 
-                    <div className="animated_card">
-                        <span className="">$</span>
+                    <div className="services__card-wrapper animated_card">
+                        <main className="services__card">
+                            <h1 className="services__card-title">Enterprise</h1>
+                            <p className="services__card-description">For large organizations</p>
+                            <h1 className="services__card-price">$100</h1>
+                        </main>
+                        <div className="services__card-features">
+                            <ul className="services__card-list">
+                                <li>Unlimited users</li>
+                                <li>24/7 support</li>
+                                <li>Custom integrations</li>
+                                <li>Dedicated account manager</li>
+                            </ul>
+                            <button className="services__button">Contact sales</button>
+                        </div>
                     </div>
                 </main>
             </div>

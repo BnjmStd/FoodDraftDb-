@@ -1,24 +1,95 @@
-.services__title {
-    font-size: 3rem;
-    font-weight: bold;
-}
-
 .services__container {
     margin-bottom: 3rem;
-}
 
-.services__cards {
-    display: flex;
-    flex-direction: row;
-    gap: 0.75rem;
-    justify-content: center;
-    align-items: center;
+    & .services__title {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    & .services__cards {
+        display: flex;
+        flex-direction: row;
+        gap: 0.75rem;
+        justify-content: center;
+        align-items: center;
+
+        & .services__card-wrapper {
+            color: white;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 350px;
+
+            & .services__card {
+                z-index: 3;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 0.25rem;
+
+                & .services__card-title {
+                    align-self: flex-start;
+                    font-size: 2rem;
+                    font-weight: bold;
+                }
+
+                & .services__card-description {
+                    font-weight: lighter;
+                }
+
+                & .services__card-price {
+                    align-self: flex-start;
+                    font-size: 2rem;
+                    font-weight: bold;
+                }
+            }
+
+            & .services__card-features {
+                z-index: 3;
+                display: flex;
+                flex-direction: column;
+                gap: 0.45rem;
+
+                & .services__card-list {
+                    list-style: none;
+                    padding-left: 0;
+                    display: flex;
+                    flex-flow: wrap column;
+
+                    & li {
+                        align-self: flex-start;
+                        position: relative;
+                        padding-left: 25px;
+
+                        &::before {
+                            content: '✔';
+                            color: white;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                        }
+                    }
+                }
+
+                & .services__button {
+                    padding: 0.65rem;
+                    border: none;
+                    background: #f200ffb6;
+                    border-radius: 16px;
+
+                    &:hover {
+                        background: #f200ff;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .animated_card {
     display: grid;
     place-items: center;
-
     position: relative;
 
     height: 500px;
@@ -28,36 +99,36 @@
     cursor: pointer;
     overflow: hidden;
 
-    & span {
-        color: rgba(0, 0, 0, 0.1);
-        font-size: 10em;
-        z-index: 2;
-    }
-
     &::before {
         position: absolute;
         content: '';
-        width: 50%; 
-        height: 180%; 
-        background: #00dc07;
+        width: 50%;
+        height: 180%;
+        background: #f200ff;
         transform: rotate(45deg);
-        transition: all .4s ease;
+        transition: transform .4s ease;
+        z-index: 1;
     }
 
     &::after {
         position: absolute;
+        z-index: 2;
         content: '';
         inset: 5px;
-        background: radial-gradient(125% 125% at 50% 10%,#fff 40%,#63e 100%);
+        z-index: 1;
+        background: #333;
         border-radius: 8px;
     }
 
     &:hover::before {
         transition: all .3s ease;
         animation: animate2 3s linear infinite;
+        animation-fill-mode: forwards;
     }
 }
 
 @keyframes animate2 {
-    to { rotate: 360deg; }
+    to {
+        rotate: 360deg;
+    }
 }
