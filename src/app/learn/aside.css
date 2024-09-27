@@ -1,0 +1,86 @@
+.sidebar {
+    background: rgb(3, 0, 0);
+    width: max-content;
+    border-radius: 10px;
+    margin: 2rem 0.25rem;
+    padding: 1rem 1rem;
+
+    &:hover .sidebar__element {
+        grid-template-columns: 40px 1fr;
+    }
+
+    & .sidebar__list {
+        list-style: none;
+        padding: 0;
+    
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+    }
+
+    & .sidebar__element--avatar {
+        text-wrap: nowrap;
+        margin-top: auto;
+        text-align: left;
+    }
+
+    & .sidebar__element {
+        padding: .8rem .8rem;
+        border-radius: 3px;
+        display: grid;
+        align-items: center;
+        grid-template-columns: 40px 0fr;
+        
+        color: #526581;
+        fill: #8491a5;
+    
+        transition: grid-template-columns .4s;
+ 
+        &:not(:has(.sidebar__icon--logo)):hover {
+            background: #09f;
+            color: #fff;
+            fill: #fff;
+            cursor: pointer;
+        }
+
+        &:has(.sidebar__icon--logo) {
+            margin-bottom: 1rem;
+        }
+
+        & .sidebar__icon--logo {
+            max-width: 30px;
+        }
+
+        & .sidebar__icon {
+            width: 100%;
+            overflow: hidden;
+            justify-self: center;
+        }
+
+        & .sidebar__icon--avatar {
+            width: 40px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 50%;
+        }
+
+        & .sidebar__hide {
+            display: grid;
+            place-content: center;
+            overflow: hidden;
+
+            & .sidebar__logo, 
+            .sidebar__text {
+                text-wrap: wrap;
+                padding-left: 1.3rem;
+            }
+
+            & .sidebar__title, 
+            .sidebar__info {
+                padding-left: 1.3rem;
+            }
+        }
+    }
+}
