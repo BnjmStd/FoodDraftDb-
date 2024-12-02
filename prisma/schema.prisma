@@ -1,5 +1,4 @@
-//url      = env("DATABASE_URL")
-
+// Archivo Prisma Schema: Conexión a SQLite
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,54 +8,278 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  country   String
-  email     String   @unique
-  password  String
-  type      String
+model SocialData {
+  id             Int     @id @default(autoincrement())
+  userId         Int @unique // Relación con el usuario
+  user           User    @relation(fields: [userId], references: [id])
+  educationLevel String? // Nivel educativo
+  occupation     String? // Ocupación
+
+  income        Float? // Ingreso mensual estimado (opcional)
+  maritalStatus String? // Estado civil
+  children      Int? // Número de hijos
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  foods     Food[]
+}
+// enum ActivityLevel {
+//  SEDENTARY
+//  MODERATE
+//  ACTIVE
+//}
+
+model LifeStyleData {
+  id         Int      @id @default(autoincrement())
+  userId     Int @unique// Relación con el usuario
+  user       User     @relation(fields: [userId], references: [id])
+  alcoholUse Boolean? // Consumo de alcohol
+  smoking    Boolean? // Consumo de tabaco
+  sleepHours Float? // Horas promedio de sueño al día
+
+  activityLevel String? // Nivel de actividad física (sedentario, moderado, activo)
+
+  // Datos antropométricos
+  height      Float? // Altura en cm
+  weight      Float? // Peso actual en kg
+  bmi         Float? // Índice de masa corporal (calculado)
+  waistCircum Float? // Circunferencia de cintura en cm
+  hipCircum   Float? // Circunferencia de cadera en cm
+  bodyFat     Float? // Porcentaje de grasa corporal
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model Medicines {
+  id     Int @id @default(autoincrement())
+  userId Int // Relación con el usuario
+
+  name String // Nombre del medicamento
+  dose String // Dosis del medicamento
+
+  frequency String // Frecuencia de consumo
+  startDate DateTime // Fecha de inicio
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  historyMedicines MedicineHistoryMedical[] // Relación con historial médico
+}
+
+model MedicineHistoryMedical {
+  medicineId Int
+  historyId  Int
+  medicine   Medicines      @relation(fields: [medicineId], references: [id])
+  history    HistoryMedical @relation(fields: [historyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([medicineId, historyId])
+}
+
+model HistoryMedical {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  user        User                     @relation(fields: [userId], references: [id])
+  medications MedicineHistoryMedical[] // Medicamentos actuales (opcional)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modelo Usuario: Representa a los usuarios del sistema.
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String // Nombre del usuario
+  country  String // País de residencia
+  email    String @unique // Email único
+  password String // Contraseña del usuario
+  type     String // Tipo de usuario (por ejemplo, admin o regular)
+
+  // Datos del sistema
+  createdAt DateTime @default(now()) // Fecha de creación
+  updatedAt DateTime @updatedAt // Fecha de última actualización
+
+  // Relación con otros modelos
+  foods    Food[] // Relación con los alimentos creados por este usuario
+  diseases UserDisease[] // Enfermedades asociadas
+
+  // Perfil de salud
+  allergies    String? // Alergias alimentarias (opcional)
+  restrictions UserRestrictions[] // Restricciones dietéticas (vegetariano, sin gluten, etc.)
+
+  historyMedical HistoryMedical? // Historial médico
+  socialData     SocialData? // Datos sociales
+  lifestyleData  LifeStyleData? // Datos de estilo de vida
+}
+
+model UserRestrictions {
+  userId        Int
+  restrictionId Int
+  user          User         @relation(fields: [userId], references: [id])
+  restriction   Restrictions @relation(fields: [restrictionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, restrictionId])
+}
+
+// Restricciones dietéticas (vegetariano, sin gluten, etc.)
+model Restrictions {
+  id          Int                @id @default(autoincrement())
+  name        String // Nombre de la restricción
+  description String // Descripción de la restricción
+  users       UserRestrictions[] // Relación con usuarios
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// modelo enfermedades
+model Disease {
+  id          Int    @id @default(autoincrement())
+  name        String // Nombre de la enfermedad 
+  description String // Descripción de la enfermedad 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users UserDisease[] // Relación con tabla usuariosEnfermedad 
+}
+
+// Relación usuarios y enfermedades
+model UserDisease {
+  userId    Int
+  diseaseId Int
+  user      User    @relation(fields: [userId], references: [id])
+  disease   Disease @relation(fields: [diseaseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, diseaseId])
+}
+
+// Modelo Alimentos
 model Food {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  categories FoodCategory[] 
+  id          Int              @id @default(autoincrement())
+  name        String // Nombre del alimento o receta
+  description String // Descripción del alimento
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  userId      Int // Relación con el usuario que creó el alimento
+  user        User             @relation(fields: [userId], references: [id])
+  categories  FoodCategory[] // Categorías a las que pertenece
+  ingredients FoodIngredient[] // Ingredientes usados
+  nutrients   FoodNutrient[] // Nutrientes asociados
+  compounds   FoodCompound[] // Compuestos asociados
 }
 
+// Modelo Categorías
 model Category {
-  id     Int    @id @default(autoincrement())
-  name   String
-  foods FoodCategory[] 
+  id    Int            @id @default(autoincrement())
+  name  String // Nombre de la categoría
+  foods FoodCategory[] // Relación con alimentos
 }
 
+// Relación de alimentos y categorías
 model FoodCategory {
   foodId     Int
   categoryId Int
-  food       Food       @relation(fields: [foodId], references: [id], onDelete: Cascade)
-  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  food       Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
   @@id([foodId, categoryId])
 }
 
-// compuesto != nutriente != ingrediente
+// Modelo Ingredientes
+model Ingredient {
+  id        Int                  @id @default(autoincrement())
+  name      String // Nombre del ingrediente
+  kcals     Float // Calorías por porción
+  unit      String // Unidad de medida (gramos, ml, etc.)
+  portion   Float // Tamaño de la porción
+  foods     FoodIngredient[] // Relación con alimentos
+  compounds IngredientCompound[] // Relación con compuestos
+  nutrients IngredientNutrient[] // Relación con nutrientes
+}
 
-//food {
-  //nutrientes
-  //categorias
-  //ingredientes
-    //avena:
-  //compuestos
-    //colorante:
-    //conservantes: 
-//
+// Relación alimentos e ingredientes
+model FoodIngredient {
+  foodId       Int
+  ingredientId Int
+  quantity     Float // Cantidad específica del ingrediente en el alimento
+  food         Food       @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
 
-// alimentos en secciones, ingredientes de cada alimento, generar tabla de ingredientes id , nombre, kcals,  unidades, porción, tabla nutricional
+  @@id([foodId, ingredientId])
+}
+
+// Relación ingredientes y compuestos
+model IngredientCompound {
+  ingredientId Int
+  compoundId   Int
+  amount       Float? // Cantidad del compuesto en el ingrediente
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  compound     Compound   @relation(fields: [compoundId], references: [id])
+
+  @@id([ingredientId, compoundId])
+}
+
+// Modelo Nutrientes
+model Nutrient {
+  id          Int                  @id @default(autoincrement())
+  name        String // Nombre del nutriente
+  unit        String // Unidad de medida (gramos, mg, etc.)
+  foods       FoodNutrient[] // Relación con alimentos
+  ingredients IngredientNutrient[] // Relación con ingredientes
+}
+
+// Relación ingredientes y nutrientes
+model IngredientNutrient {
+  ingredientId Int
+  nutrientId   Int
+  amount       Float // Cantidad del nutriente en el ingrediente
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  nutrient     Nutrient   @relation(fields: [nutrientId], references: [id])
+
+  @@id([ingredientId, nutrientId])
+}
+
+// Relación alimentos y nutrientes
+model FoodNutrient {
+  foodId     Int
+  nutrientId Int
+  amount     Float // Cantidad del nutriente en el alimento
+  food       Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  nutrient   Nutrient @relation(fields: [nutrientId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([foodId, nutrientId])
+}
+
+// Modelo Compuestos
+model Compound {
+  id          Int                  @id @default(autoincrement())
+  name        String // Nombre del compuesto (ejemplo: Conservantes, Colorantes)
+  type        String // Tipo del compuesto (Natural, Artificial)
+  foods       FoodCompound[] // Relación con alimentos
+  ingredients IngredientCompound[] // Relación con ingredientes
+}
+
+// Relación alimentos y compuestos
+model FoodCompound {
+  foodId     Int
+  compoundId Int
+  amount     Float? // Cantidad opcional
+  food       Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  compound   Compound @relation(fields: [compoundId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([foodId, compoundId])
+}
